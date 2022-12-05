@@ -1,0 +1,84 @@
+<?php
+
+$us = "root";
+$passwo = "";
+
+try {
+    $database = new PDO("mysql:host=localhost;dbname=ouder", $us, $passwo);
+} catch (PDOException $e) {
+    print "Erreur : ".$e->getMessage();
+}
+
+function addActivity($activity, $date, $doer) {
+    global $database;
+    $sql = "INSERT INTO `activities` (activity, date, doer) VALUES (?, ?, ?);";
+    $statement = $database->prepare($sql);
+    $statement->execute([$activity, $date, $doer]);
+}
+
+function deleteActivity($activityId) {
+    global $database;
+    $sql = "DELETE FROM `activities` WHERE id=?;";
+    $statement = $database->prepare($sql);
+    $statement->execute([$activityId]);
+}
+
+function getLastId(){
+    global $database;
+    $sql = "SELECT MAX(id) FROM `activities`;";
+    $result = $database->query($sql);
+    foreach($result as $row) {
+        return($row[0]);
+    }
+}
+
+function getDateDatabase($id) {
+    global $database;
+    $sql = "SELECT date FROM `activities` WHERE id=?;";
+    $statement = $database->prepare($sql);
+    $statement->execute([$id]);
+    while ($row = $statement->fetch()) {
+        return($row[0]);
+    }
+}
+
+function getDoerDatabase($id) {
+    global $database;
+    $sql = "SELECT doer FROM `activities` WHERE id=?;";
+    $statement = $database->prepare($sql);
+    $statement->execute([$id]);
+    while ($row = $statement->fetch()) {
+        return($row[0]);
+    }
+}
+
+function getActivityDatabase($id) {
+    global $database;
+    $sql = "SELECT activity FROM `activities` WHERE id=?;";
+    $statement = $database->prepare($sql);
+    $statement->execute([$id]);
+    while ($row = $statement->fetch()) {
+        return($row[0]);
+    }
+}
+
+function getActivitiesDatabase($limit) {
+    global $database;
+    $sql = "SELECT * FROM `activities` ORDER BY date DESC LIMIT :limit;";
+    $statement = $database->prepare($sql);
+    $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $statement->execute();
+    $rows = $statement->fetchAll();
+    return $rows;
+}
+
+function existId($id) {
+    global $database;
+    $sql = "SELECT COUNT(*) FROM activities WHERE id=?;";
+    $statement = $database->prepare($sql);
+    $statement->execute([$id]);
+    while ($row = $statement->fetch()) {
+        return $row[0];
+    }
+}
+?> 
