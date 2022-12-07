@@ -1,88 +1,28 @@
-<html lang="fr">
-
-<?php 
-    session_start();
-    unset($_SESSION["pseudo"]);
-    include "app/css.php";
+<!DOCTYPE html>
+<?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+session_start();
 ?>
-
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>FED - Connexion</title>
-    <link rel="stylesheet" href="style/style.css">
-    <link rel="icon" href="images/fed-logo-white-background.png">
-    <style>
-        :root {
-            --light-background-color: <?php echo $_SESSION["lightBackgroundColor"];?>;
-            --background-color: <?php echo $_SESSION["backgroundColor"];?>;
-            --border-color: <?php echo $_SESSION["borderColor"];?>;
-            --font-color: <?php echo $_SESSION["fontColor"];?>;
-            --font-button-color: <?php echo $_SESSION["fontButtonColor"];?>;
-            --light-font-button-color: <?php echo $_SESSION["lightFontButtonColor"];?>;
-            --dark-font-button-color: <?php echo $_SESSION["darkFontButtonColor"];?>;
-            --image-white: <?php echo $_SESSION["imageWhite"];?>;
-        }
-    </style>
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/forumone.png">
+    <title>Connexion - Forumone</title>
 </head>
 <body>
-    <header id="header">
-        <div id="headercontent"></div>
-        <div id="headercontent">
-            <div id="title">
-                <img src="images/<?php 
-                    if($theme == "lighttheme"){
-                        echo "fed-logo";
-                    } else {
-                        echo "fed-logo-white-background";
-                    }
-                ?>.png">
-                F∃D
-            </div>
-        </div>
-        <div id="headercontent">
-            <div id="theme">
-                <form action="tempo/tempotheme.php" method="post">
-                    <input type="hidden" name="sourcePage" value="login">
-                    <input type="hidden" name="targetTheme" value="<?php
-                    if($theme == "lighttheme"){
-                        echo "darktheme";
-                    } else {
-                        echo "lighttheme";
-                    }
-                    ?>">
-                    <input type="image" src="images/<?php
-                    if($theme == "lighttheme"){
-                        echo "moon";
-                    } else {
-                        echo "sun";
-                    }
-                    ?>.png" name="themeButton" id="themebutton">
-                </form>
-            </div>
-        </div>
-    </header>
-    <section id="connectform">
-        <?php 
-            if(isset($_SESSION["errorMessage"])) {
-                echo "<p>".$_SESSION["errorMessage"]."</p>";
-                unset($_SESSION["errorMessage"]);
-            }
-        ?>
-        <form action="tempo/tempologin.php" method="post" id="form">
-            <div id="pseudo">
-                <img src="images/identifier.png">
-                <input type="text" name="pseudo" placeholder="Pseudo">
-            </div>
-            <div id="password">
-                <img src="images/lock.png">
-                <input type="password" name="mdp" id="mdp" placeholder="Mot de passe">
-            </div>
-            <input type="submit" value="Connexion" name="submitbutton" id="button">
-        </form>
-    </section>
-    <section id="register">
-        <a href="register.php">Vous n'avez pas de compte ?</a>
-    </section>
-    
+    <?php 
+    if ($_SESSION["problem_login"]==True){
+        echo "Votre mot de passe ou votre identifiant n'a pas été trouvé";
+    }
+    ?>
+    <form action="index.php" method="post" id="form">
+        <h1>Votre Pseudo :</h1>
+        <input type="text" name="login_pseudo" require>
+        <h1>Votre mot de passe :</h1>
+        <input type="password" name="login_password" require>
+    </form>
 </body>
 </html>
