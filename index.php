@@ -45,8 +45,8 @@ if(isset($_POST["register_pseudo"])){
             header("Location: register.php");
             exit();
         }
-        createUser($pseudo, $password);
-        $_SESSION["login"] = getId($pseudo);
+        createUser($_POST["register_pseudo"], $_POST["register_password"]);
+        $_SESSION["login"] = getId($_POST["register_pseudo"]);
     }
 }
 
@@ -57,7 +57,7 @@ if (isset($_POST["login_pseudo"])){
             header("Location: login.php");
             exit();
         } else {
-            $_SESSION["login"] = checkLogin($_POST["login_pseudo"],$_POST["login_password"]);
+            $_SESSION["login"] = checkLogin($_POST["login_pseudo"], $_POST["login_password"]);
         }
     }   
 
@@ -120,7 +120,7 @@ if (isset($_POST["login_pseudo"])){
             <h3 id="subjects__new_subject__error">
                 Impossible d'utliser l'espace ou le caractère invisible dans le nom du sujet
             </h3>
-                <?php}
+                <?php }
             } ?>
             <div id="subjects__new_subject__formu">
                 <?php 

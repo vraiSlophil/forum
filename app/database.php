@@ -58,8 +58,10 @@ function createUser($pseudo, $password){
     $sql = "INSERT INTO `clients` (pseudo, password, date, permission) VALUES (:pseudo, :password, NOW(), :permission);";
     $statement = $database->prepare($sql);
     $statement->bindParam(':pseudo', $pseudo);
-    $statement->bindParam(':password', md5($password));
-    $statement->bindParam(':permission', "user");
+    $md5 = md5($password);
+    $statement->bindParam(':password', $md5);
+    $str = "user";
+    $statement->bindParam(':permission', $str);
     $statement->execute();
     $statement->closeCursor();
 }

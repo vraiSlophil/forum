@@ -14,7 +14,7 @@ session_start();
 </head>
 <body>
     <?php 
-    if ($_SESSION["problem_login"]==True){
+    if ($_SESSION["problem_login"]){
         echo "Votre mot de passe ou votre identifiant n'a pas été trouvé";
     }
     ?>

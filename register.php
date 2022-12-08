@@ -23,8 +23,8 @@ session_start();
         unset ($_SESSION["pseudo_too_long"]);
     }
     if ($_SESSION["pseudo_not_unique"]){
-        echo "Un autre utilisateur utilise déjà votre pseudo"
-        unset ($_SESSION["pseudo_not_unique"])
+        echo "Un autre utilisateur utilise déjà votre pseudo";
+        unset ($_SESSION["pseudo_not_unique"]);
     }
     ?>
 <form action="index.php" method="post" id="form">
@@ -34,7 +34,7 @@ session_start();
     <input type="password" name="register_password" require>
     <h1>Confirmer votre mot de passe :</h1>
     <input type="password" name="register_confirm_password" require>
-    <input type="submit" value="Valider"></input>
+    <input type="submit" value="Valider">
 </form> 
 </body>
 </html>
