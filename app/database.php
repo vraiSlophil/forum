@@ -2,8 +2,8 @@
 function sql_connect() {
     $dbname = 'forum_no_mb_nl';
     $identifiant = 'root';
-    $motdepasse = 'Yejequ@4';
-    $port = 3306;
+    $motdepasse = '';
+    $port = 3307;
     try { 
         $sch='mysql:host=localhost;dbname='.$dbname.';port='.$port;
         $bdd = new PDO($sch , $identifiant, $motdepasse);
