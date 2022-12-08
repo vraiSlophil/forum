@@ -27,7 +27,7 @@ if(isset($_POST['new_subject_name'])) {
 }
 
 if(isset($_POST["register_pseudo"])){
-    if(!strlen($_POST["register_pseudo"]) <= 24) {
+    if(!strlen($_POST["register_pseudo"]) > 24) {
         $_SESSION["pseudo_too_long"]=True;
         header("Location: register.php");
         exit();
@@ -123,8 +123,7 @@ if (isset($_POST["login_pseudo"])){
                 <?php }
             } ?>
             <div id="subjects__new_subject__formu">
-                <?php 
-                /*
+                <?php
                 if (isset($_SESSION['login'])) {
                 ?>
                 <form action="#" method="POST">
@@ -133,7 +132,7 @@ if (isset($_POST["login_pseudo"])){
                 </form>
                 <?php } else { ?>
                 <button id="new_subject__register_login" href="login.php">Connectez-vous</button>
-                <?php } */?>
+                <?php } ?>
             </div>
         </div>
     </section>

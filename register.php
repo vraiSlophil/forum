@@ -14,15 +14,16 @@ session_start();
 </head>
 <body>
     <?php 
-    if ($_SESSION["problem_password"]==True){
+    if (isset($_SESSION["problem_password"]) && $_SESSION["problem_password"]){
         echo "Votre confirmation de mot de passe et votre mot de passe ne sont pas les mêmes";
         unset ($_SESSION["problem_password"]);
-    } 
-    if ($_SESSION["pseudo_too_long"]==True){
+    }
+
+    if (isset($_SESSION["pseudo_too_long"]) && $_SESSION["pseudo_too_long"]){
         echo "Votre pseudo est trop long";
         unset ($_SESSION["pseudo_too_long"]);
     }
-    if ($_SESSION["pseudo_not_unique"]){
+    if (isset($_SESSION["pseudo_not_unique"]) && $_SESSION["pseudo_not_unique"]){
         echo "Un autre utilisateur utilise déjà votre pseudo";
         unset ($_SESSION["pseudo_not_unique"]);
     }
