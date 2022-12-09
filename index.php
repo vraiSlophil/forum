@@ -7,22 +7,27 @@ session_start();
 include_once "app/database.php";
 
 $error = false;
-
 $errorLen = false;
 $errorChar = false;
 
 $load = 20;
 
-if(isset($_POST['new_subject_name'])) {
+if (isset($_GET["logout"]) && $_GET["logout"] && isset($_SESSION["login"])) {
+    unset($_SESSION["login"]);
+    header("Location: index.php");
+    exit();
+}
+
+if(isset($_POST['new_subject_name']) && isset($_SESSION["login"])) {
     $new_sbjct = $_POST['new_subject_name'];
     if (strlen($new_sbjct) > 128) {
         $error = true;
         $errorLen = true;
-    } elseif(str_contains($new_sbjct, " ") || str_contains($new_sbjct, "‎")) {
+    } else if (strpos($new_sbjct, " ") !== false || strpos($new_sbjct, "‎") !== false) {
         $error = true;
         $errorChar = true;
     } else {
-        createSubject($_SESSION["login"], $new_sbjct);
+        $sub = createSubject($new_sbjct, $_SESSION["login"]);
     }
 }
 
@@ -33,34 +38,34 @@ if(isset($_POST["register_pseudo"])){
         exit();
     }
 
-    if (!uniqueName($_POST["register_pseudo"])) {
-        $_SESSION["pseudo_not_unique"]=True;
-        header("Location: register.php");
-        exit();
-    }
-
     if(isset($_POST["register_password"])){
         if($_POST["register_password"] != $_POST["register_confirm_password"]){
             $_SESSION["problem_password"] = true;
             header("Location: register.php");
             exit();
         }
-        createUser($_POST["register_pseudo"], $_POST["register_password"]);
+        $user = createUser($_POST["register_pseudo"], $_POST["register_password"]);
+        if($user != 1) {
+            $_SESSION["pseudo_not_unique"] = true;
+            header("Location: register.php");
+            exit();
+        }
         $_SESSION["login"] = getId($_POST["register_pseudo"]);
+        header("Location: index.php");
+        exit();
     }
 }
 
-if (isset($_POST["login_pseudo"])){
-    if (isset($_POST["login_password"])){
-        if (checkLogin($_POST["login_pseudo"],$_POST["login_password"])==0){
-            $_SESSION["problem_login"]=True;
-            header("Location: login.php");
-            exit();
-        } else {
-            $_SESSION["login"] = checkLogin($_POST["login_pseudo"], $_POST["login_password"]);
-        }
-    }   
-
+if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
+    $lo = checkLogin($_POST["login_pseudo"], $_POST["login_password"]);
+    if ($lo == 0){
+        $_SESSION["problem_login"] = true;
+        header("Location: login.php");
+        exit();
+    }
+    $_SESSION["login"] = $lo;
+    header("Location: index.php");
+    exit();
 }
 
 ?>
@@ -74,14 +79,20 @@ if (isset($_POST["login_pseudo"])){
     <title>Accueil - Forumone</title>
 </head>
 <body>
+<?php print_r($sub); ?>
     <header id="header">
         <div id="header__head">
             <img src="img/forumone.png" alt="icon" id="header__head__image">
             <h1 id="header__head__title">Forumone</h1>
         </div>
         <?php if (isset($_SESSION['login'])) {?>
-            <div id="header__user_name">
-                <?php echo htmlspecialchars(getName($_SESSION['login'])); ?>
+            <div id="header__user">
+                <div id="header__user__name">
+                    <?php echo htmlspecialchars(getName($_SESSION['login'])); ?>
+                </div>
+                <a href="?logout=1" id="header__user__name__log_out_link">
+                    <img src="img/log-out.png" alt="log out image" id="header__user__name__log_out_link__image">
+                </a>
             </div>
         <?php } else { ?>
             <div id="header__links">

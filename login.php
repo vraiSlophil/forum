@@ -14,15 +14,17 @@ session_start();
 </head>
 <body>
     <?php 
-    if ($_SESSION["problem_login"]){
+    if (isset($_SESSION["problem_login"]) && $_SESSION["problem_login"]){
         echo "Votre mot de passe ou votre identifiant n'a pas été trouvé";
+        unset($_SESSION["problem_login"]);
     }
     ?>
     <form action="index.php" method="post" id="form">
         <h1>Votre Pseudo :</h1>
-        <input type="text" name="login_pseudo" require>
+        <input type="text" name="login_pseudo" required>
         <h1>Votre mot de passe :</h1>
-        <input type="password" name="login_password" require>
+        <input type="password" name="login_password" required>
+        <input type="submit">
     </form>
 </body>
 </html>

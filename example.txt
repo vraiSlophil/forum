@@ -81,4 +81,33 @@ function existId($id) {
         return $row[0];
     }
 }
-?> 
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <?php foreach ($messages as $values) { ?>
+            <div id="messages__list__element">
+                <p id="messages__list__element__author"
+                    <?php echo htmlspecialchars(getName($values['idauteur'])); ?>
+                </p>
+                <p id="messages__list__element__content">
+                    <?php echo htmlspecialchars(getName($values["contenu"])); ?>
+                </p>
+            </div>
+            <?php } ?>

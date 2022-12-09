@@ -20,7 +20,7 @@ function getName($id) {
     $statement = $database->prepare($sql);
     $statement->bindValue(':id', $id, PDO::PARAM_INT);
     $statement->execute();
-    return $statement->fetchAll();
+    return $statement->fetchAll()[0]["pseudo"];
 }
 
 function getPassword($id) {
@@ -50,10 +50,14 @@ function createSubject($sbjct_name, $id) {
     $statement->bindParam(':id', $id);
     $statement->bindParam(':titre', $sbjct_name);
     $statement->execute();
-    $statement->closeCursor();
+    $count = $statement->rowCount();
+    if ($count != 1) {
+        return 0;
+    }
+    return 1;
 } 
 
-function createUser($pseudo, $password){
+function createUser($pseudo, $password) {
     $database = sql_connect();
     $sql = "INSERT INTO `clients` (pseudo, password, date, permission) VALUES (:pseudo, :password, NOW(), :permission);";
     $statement = $database->prepare($sql);
@@ -63,33 +67,34 @@ function createUser($pseudo, $password){
     $str = "user";
     $statement->bindParam(':permission', $str);
     $statement->execute();
-    $statement->closeCursor();
+    return $statement->rowCount();
 }
 
 function getSubjects($limit) {
-    global $database;
+    $database = sql_connect();
     $sql = "SELECT * FROM `sujets` ORDER BY date DESC LIMIT :limit;";
     $statement = $database->prepare($sql);
     $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
     $statement->execute();
-    $rows = $statement->fetchAll();
-    return $rows;
+    return $statement->fetchAll();
 }
 
 function checkLogin($pseudo, $password){
     $database = sql_connect();
     $sql = "SELECT password FROM clients WHERE pseudo = :p;";
-    $inter_check = $database->prepare($sql);
-    $inter_check->bindParam(":p",$pseudo);
-    // $inter_check->bindParam(":mdp",$password);
-    $inter_check->execute();
-    $check = $inter_check->fetchAll();
-    if ($check == md5($password)){
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":p",$pseudo);
+    $statement->execute();
+    $count = $statement->rowCount();
+    if ($count != 1) {
+        return 0;
+    }
+    $check = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($check[0]["password"] == md5($password)){
         return getId($pseudo);
     } else {
         return 0;
     }
-
 }
 
 ?>

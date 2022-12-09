@@ -53,13 +53,34 @@ body {
     padding: 0.5em;
 }
 
-#header__links {
+#header__links,
+#header__user {
     padding: 1em;
 }
 
-#header__links > a {
+#header__links > a,
+#header__user__name__log_out_link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
     background-color: #A90000;
     padding: 0.3em 0.6em;
     margin: 0 1em;
     border-radius: 0.3em;
+}
+
+#header__user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#header__user__name__log_out_link {
+    padding: 0.6em;
+}
+
+#header__user__name__log_out_link__image {
+    height: 1.2em;
+    filter: invert(1);
 }

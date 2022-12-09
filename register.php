@@ -30,11 +30,11 @@ session_start();
     ?>
 <form action="index.php" method="post" id="form">
     <h1>Créer votre pseudo :</h1> 
-    <input type="text" name="register_pseudo" require>
+    <input type="text" name="register_pseudo" required>
     <h1>Créer votre mot de passe :</h1>
-    <input type="password" name="register_password" require>
+    <input type="password" name="register_password" required>
     <h1>Confirmer votre mot de passe :</h1>
-    <input type="password" name="register_confirm_password" require>
+    <input type="password" name="register_confirm_password" required>
     <input type="submit" value="Valider">
 </form> 
 </body>
