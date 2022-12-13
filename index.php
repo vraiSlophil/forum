@@ -10,6 +10,12 @@ $error = false;
 $errorLen = false;
 $errorChar = false;
 
+if (isset($_POST["load"])) {
+    $load = $_POST["load"]+20;
+    header("Location: index.php");
+    exit();
+}
+
 $load = 20;
 
 if (isset($_GET["logout"]) && $_GET["logout"] && isset($_SESSION["login"])) {
@@ -23,11 +29,13 @@ if(isset($_POST['new_subject_name']) && isset($_SESSION["login"])) {
     if (strlen($new_sbjct) > 128) {
         $error = true;
         $errorLen = true;
-    } else if (strpos($new_sbjct, " ") !== false || strpos($new_sbjct, "‎") !== false) {
+    } else if (!preg_match('/[^A-Za-z0-9\p{P}\p{S}\p{L}]/', $new_sbjct)) { //inderdit certains caractères
         $error = true;
         $errorChar = true;
     } else {
         $sub = createSubject($new_sbjct, $_SESSION["login"]);
+        header("Location: index.php");
+        exit();
     }
 }
 
@@ -79,11 +87,13 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
     <title>Accueil - Forumone</title>
 </head>
 <body>
-<?php print_r($sub); ?>
     <header id="header">
         <div id="header__head">
             <img src="img/forumone.png" alt="icon" id="header__head__image">
-            <h1 id="header__head__title">Forumone</h1>
+            <div id="header__head__title">
+                <h1 id="header__head__title__title">Forumone</h1>
+                <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
+            </div>
         </div>
         <?php if (isset($_SESSION['login'])) {?>
             <div id="header__user">
@@ -103,9 +113,8 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
     </header>
 
     <section id="subjects">
-
-        <div id="subjects__list">
         <?php foreach(getSubjects($load) as $values) { ?>
+        <div id="subjects__list">
             <div id="subjects__list__element">
                 <a href="subject.php?id=<?php echo $values["id"]; ?>" id="subjects__list__element__link">
                     <?php echo htmlspecialchars($values["titre"]); ?>
@@ -114,39 +123,43 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
                     par <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
                 </p>
             </div>
+        </div>
+        <?php } ?>
+        <form action="#" method="post" id="subjects__more_sub">
+            <input type="hidden" name="load" value="<?php echo $load; ?>">
+            <input type="submit" value="Voir plus">
+        </form>
+
+    </section>
+    <div id="new_subject">
+        <?php if ($error) {
+            if ($errorLen) { ?>
+                <p id="new_subject__error">
+                    La taille du sujet de doit pas excéder les 128 caractères
+                </p>
+            <?php }
+            if ($errorChar) { ?>
+                <p id="new_subject__error">
+                    Impossible d'utliser l'espace ou le caractère invisible dans le nom du sujet
+                </p>
+            <?php }
+        } ?>
+        <p id="new_subject__title">
+            Nouveau sujet :
+        </p>
+        <div id="new_subject__formu">
+            <?php
+            if (isset($_SESSION['login'])) {
+            ?>
+            <form action="#" method="post" id="new_subject__formu__form">
+                <input id="new_subject__formu__form__name" name="new_subject_name" type="textbox" placeholder="Entrez votre nouveau sujet">
+                <input id="new_subject__formu__form__submit" type="submit" value="Créer">
+            </form>
+            <?php } else { ?>
+            <a id="new_subject__formu__register_login" href="login.php">Connectez-vous</a>
             <?php } ?>
         </div>
-    
-        <div id="subjects__new_subject">
-            <h2 id="subjects__new_subject__title">
-                Nouveau sujet
-            </h2>
-            <?php if ($error) { 
-                 if ($errorLen) { ?>
-            <h3 id="subjects__new_subject__error">
-                La taille du sujet de doit pas excéder les 128 caractères
-            </h3>
-                <?php } 
-                if ($errorChar) { ?>
-            <h3 id="subjects__new_subject__error">
-                Impossible d'utliser l'espace ou le caractère invisible dans le nom du sujet
-            </h3>
-                <?php }
-            } ?>
-            <div id="subjects__new_subject__formu">
-                <?php
-                if (isset($_SESSION['login'])) {
-                ?>
-                <form action="#" method="POST">
-                    <input id="subjects__new_subject__formu__name" name="new_subject_name" type="textbox" value="Entrez votre nouveau sujet">
-                    <input id="subjects__new_subject__formu__submit" type="submit" value="Créer">
-                </form>
-                <?php } else { ?>
-                <button id="new_subject__register_login" href="login.php">Connectez-vous</button>
-                <?php } ?>
-            </div>
-        </div>
-    </section>
+    </div>
 
 </body>
 </html>

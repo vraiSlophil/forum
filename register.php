@@ -10,9 +10,19 @@ session_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/forumone.png">
+    <link rel="stylesheet" href="css/style.css">
     <title>Connexion - Forumone</title>
 </head>
 <body>
+    <header id="header">
+        <div id="header__head">
+            <img src="img/forumone.png" alt="icon" id="header__head__image">
+            <div id="header__head__title">
+                <h1 id="header__head__title__title">Forumone</h1>
+                <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
+            </div>
+        </div>
+    </header>
     <?php 
     if (isset($_SESSION["problem_password"]) && $_SESSION["problem_password"]){
         echo "Votre confirmation de mot de passe et votre mot de passe ne sont pas les mêmes";

@@ -19,15 +19,21 @@ button {
     border: unset;
     color: white;
     font-size: 16px;
-    cursor: pointer;
 }
 
 a {
     text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 body {
     background-color: #202020;
+    min-height: 100vh;
 }
 
 #header {
@@ -38,7 +44,7 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
-
+    padding: 1em 0;
 }
 
 #header__head {
@@ -46,6 +52,13 @@ body {
     justify-content: center;
     align-items: center;
     padding: 0 1em;
+}
+
+#header__head__title {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
 }
 
 #header__head__image {
@@ -56,24 +69,36 @@ body {
 #header__links,
 #header__user {
     padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#header__user {
+    padding: unset;
 }
 
 #header__links > a,
-#header__user__name__log_out_link {
+#header__user__name__log_out_link,
+#new_subject__formu__form__submit,
+#subjects__more_sub > input,
+#login_form__form__submit {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
     background-color: #A90000;
-    padding: 0.3em 0.6em;
+    padding: 0.4em 0.8em;
     margin: 0 1em;
     border-radius: 0.3em;
+    cursor: pointer;
 }
 
-#header__user {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#subjects__more_sub > input,
+#login_form__form__submit,
+#new_subject__formu__form__submit {
+    font-weight: bold;
+    margin: unset;
 }
 
 #header__user__name__log_out_link {
@@ -83,4 +108,151 @@ body {
 #header__user__name__log_out_link__image {
     height: 1.2em;
     filter: invert(1);
+}
+
+#subjects,
+#new_subject {
+    padding: 2em 0;
+    width: 50%;
+    margin: 2em auto 0 auto;
+    background-color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 0.8em;
+}
+
+#subjects__list {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#subjects__list__element {
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    background-color: #303030;
+    padding: 1em 0;
+    margin: 0.5em 0;
+    border-radius: 3em;
+}
+
+#subjects__more_sub > input:hover,
+#login_form__form__submit:hover,
+#new_subject__formu__form__submit:hover {
+    text-decoration: underline;
+}
+
+#new_subject__formu,
+#new_subject__formu__form,
+#new_subject__formu__register_login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#new_subject__formu__form__name {
+    margin: 0.5em;
+    padding: 0.5em;
+    background-color: #202020;
+    border-radius: 0.3em;
+    min-width: 20em;
+}
+
+#new_subject__error,
+#error_connect__message {
+    color: #db1010;
+    margin: 0.5em 0;
+}
+
+#new_subject__title {
+    min-width: 20em;
+}
+
+#messages {
+    width: 100%;
+    margin: 4em auto;
+    background-color: #252525;
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#messages__list {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+#messages__list__element {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+
+#error_connect {
+    width: 40%;
+    margin: 4em auto;
+    background-color: #252525;
+}
+
+#error_connect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+}
+
+#login_form {
+    width: 40%;
+    margin: 4em auto;
+    background-color: #252525;
+}
+
+#login_form {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    padding: 1em;
+    border-radius: 0.8em;
+    position: relative;
+}
+
+#login_form__form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#login_form__form > * {
+    width: 70%;
+}
+
+#login_form__form__name,
+#login_form__form__password {
+    margin: 1em 0;
+}
+
+#login_form__form__name__pseudo,
+#login_form__form__password__password {
+    margin: 0.5em 0;
+    padding: 0.5em;
+    background-color: #202020;
+    border-radius: 0.3em;
+    width: 100%;
 }

@@ -45,7 +45,7 @@ function getId($pseudo) {
 
 function createSubject($sbjct_name, $id) {
     $database = sql_connect();
-    $sql = "INSERT INTO 'sujets'(idauteur, titre, date) VALUES (:id, :titre, NOW());";
+    $sql = "INSERT INTO sujets(idauteur, titre, date) VALUES (:id, :titre, NOW());";
     $statement = $database->prepare($sql);
     $statement->bindParam(':id', $id);
     $statement->bindParam(':titre', $sbjct_name);
@@ -97,4 +97,60 @@ function checkLogin($pseudo, $password){
     }
 }
 
+function getSubjectName($id) {
+    $database = sql_connect();
+    $sql = "SELECT titre FROM sujets WHERE id = :id;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":id", $id, PDO::PARAM_INT);
+    $statement->execute();
+    return $statement->fetchAll();
+}
+
+function getMessages($id, $limit) {
+    $database = sql_connect();
+    $sql = "SELECT id, idauteur, contenu FROM messages WHERE idsujet = :idsbjct ORDER BY id DESC LIMIT :limit;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idsbjct", $id, PDO::PARAM_INT);
+    $statement->bindParam(":limit", $limit, PDO::PARAM_INT);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function addMessages($idauteur, $idsujet, $contenu) {
+    $database = sql_connect();
+    $sql = "INSERT INTO messages (idauteur, idsujet, contenu) VALUES (:idauteur, :idsujet, :contenu);";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(':idauteur', $idauteur, PDO::PARAM_INT);
+    $statement->bindParam(':idsujet', $idsujet, PDO::PARAM_INT);
+    $statement->bindParam(':contenu', $contenu);
+    $statement->execute();
+    return $statement->rowCount();
+
+}
+
+function deleteMessage($idmessage) {
+    $database = sql_connect();
+    $sql = "DELETE FROM messages WHERE id = :idmsg;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idmsg", $idmessage, PDO::PARAM_INT);
+    $statement->execute();
+}
+
+function getAuteur($idmessage) {
+    $database = sql_connect();
+    $sql = "SELECT idauteur FROM messages WHERE id = :idmsg;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idmsg", $idmessage, PDO::PARAM_INT);
+    $statement->execute();
+    return $statement->fetchAll();
+}
+
+function getTitle($idsujet) {
+    $database = sql_connect();
+    $sql = "SELECT title FROM sujets WHERE id = :idsjt;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idsjt", $idsujet, PDO::PARAM_INT);
+    $statement->execute();
+    return $statement->fetchAll();
+}
 ?>

@@ -6,9 +6,29 @@ session_start();
 
 include_once "app/database.php";
 
-$titre = getSubjectName($_POST['id']);
-$messages = getMessages($_POST['id']);
+if (isset($_POST["load"])) {
+    $load = $_POST["load"]+50;
+    header("Location: subject.php");
+    exit();
+}
 
+$load = 50;
+
+if (isset($_POST["delete_id_message"])) {
+    $idmsg = $_POST["delete_id_message"];
+    $idauteur = getAuteur($idmsg)[0][0];
+    if ( $idauteur == $_SESSION["login"]) {
+        deleteMessage($idmsg);
+    }
+}
+
+if (isset($_POST["write_message"])) {
+    addMessages($_SESSION['login'], $_GET['id'], $_POST["write_message"]);
+}
+
+
+$titre = getSubjectName($_GET['id']);
+$messages = getMessages($_GET['id'], $load);
 ?>
 
 <html lang="fr">
@@ -16,14 +36,47 @@ $messages = getMessages($_POST['id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width", initial-scale=1.0>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
     <title><?php echo $titre?> - Forumone</title>
-    </head>
+</head>
 <body>
+    <header id="header">
+        <div id="header__head">
+            <img src="img/forumone.png" alt="icon" id="header__head__image">
+            <div id="header__head__title">
+                <h1 id="header__head__title__title">Forumone</h1>
+                <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
+            </div>
+        </div>
+    </header>
     <section id="messages">
-
-        <div id="messages__list">
-            <?php print_r($messages); ?>
-
+        <div icd="messages__list">
+            <?php foreach($messages as $values){ ?>
+                <div id="messages__list__element">
+                    <p id="subjects__list__element__name">
+                        <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
+                </p>
+                <p id="messages__list__element__message">
+                    <?php echo htmlspecialchars($values["contenu"]); ?>
+                </p>
+                <?php if($_SESSION['login'] == $values["idauteur"]) { ?>
+                    <form action="#" method="post" id="messages__list__element__delete">
+                        <input type="hidden" name="delete_id_message" value="<?php echo $values["id"] ?>">
+                        <input type="image" src="img/delete.png" alt="delete">
+                    </form>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+            </div>
+            <form action="#" method="post" id="messages__more_sub">
+                <input type="hidden" name="load" value="<?php echo $load; ?>">
+                <input type="submit" value="Voir plus">
+            </form>
+        <div id = messages__add> 
+            <form action='#' method="post" id="messages__formu">
+                <input type="textbox" name="write_message" placeholder="Ecrire un message">
+                <input type='submit' name="send_message" value="Envoyez">
+            </form>
         </div>
     </section>
 </body>
