@@ -9,12 +9,14 @@ include_once "app/database.php";
 $error = false;
 $errorLen = false;
 $errorChar = false;
+
 $rights = false;
+$connected = false;
 
 if (isset($_SESSION["login"])) {
-    $connected = True;
-    if (getPermission($_SESSION['login'])[0] == "Moderateur" || getPermission($_SESSION['login'])[0] == 'Administrateur') {
-        $rights = True;
+    $connected = true;
+    if (getPermission($_SESSION['login'])[0]["permission"] == "moderateur" || getPermission($_SESSION['login'])[0]["permission"] == 'administrateur') {
+        $rights = true;
     }
 }
 
@@ -34,13 +36,13 @@ if (isset($_POST["load"])) {
 
 $load = 20;
 
-if (isset($_GET["logout"]) && $_GET["logout"] && isset($_SESSION["login"])) {
+if (isset($_GET["logout"]) && $_GET["logout"] && $connected) {
     unset($_SESSION["login"]);
     header("Location: index.php");
     exit();
 }
 
-if(isset($_POST['new_subject_name']) && isset($_SESSION["login"])) {
+if(isset($_POST['new_subject_name']) && $connected) {
     $new_sbjct = $_POST['new_subject_name'];
     if (strlen($new_sbjct) > 128) {
         $error = true;
@@ -57,7 +59,7 @@ if(isset($_POST['new_subject_name']) && isset($_SESSION["login"])) {
 
 if(isset($_POST["register_pseudo"])){
     if(strlen($_POST["register_pseudo"]) > 24) {
-        $_SESSION["pseudo_too_long"]=True;
+        $_SESSION["pseudo_too_long"] = true;
         header("Location: register.php");
         exit();
     }
@@ -74,7 +76,7 @@ if(isset($_POST["register_pseudo"])){
             header("Location: register.php");
             exit();
         }
-        $_SESSION["login"] = getId($_POST["register_pseudo"]);
+        $_SESSION["login"] = getId($_POST["register_pseudo"])[0]["id"];
         header("Location: index.php");
         exit();
     }
@@ -111,7 +113,7 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
                 <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
             </div>
         </div>
-        <?php if (isset($_SESSION['login'])) {?>
+        <?php if ($connected) {?>
             <div id="header__user">
                 <div id="header__user__name">
                     <?php echo htmlspecialchars(getName($_SESSION['login'])); ?>
@@ -119,6 +121,11 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
                 <a href="?logout=1" id="header__user__name__log_out_link">
                     <img src="img/log-out.png" alt="log out image" id="header__user__name__log_out_link__image">
                 </a>
+                <?php if ($rights) { ?>
+                <a href="admin.php" id="header__user__name__admin_link">
+                    <img src="img/personal-security.png" alt="log out image" id="header__user__name__admin_link__image">
+                </a>
+                <?php } ?>
             </div>
         <?php } else { ?>
             <div id="header__links">
@@ -135,25 +142,30 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
                 <a href="subject.php?id=<?php echo $values["id"]; ?>" id="subjects__list__element__link">
                     <?php echo htmlspecialchars($values["titre"]); ?>
                 </a>
+                <?php if ($connected) {
+                if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
+                <form action="#" method="post" id="subjects__list__element__delete">
+                    <input type="hidden" name="delete_id_subject" value="<?php echo $values["id"] ?>">
+                    <input type="image" id="subjects__list__element__delete__image" src="img/delete.png" alt="delete">
+                </form>
+                <?php }
+                } ?>
                 <p id="subjects__list__element__name">
                     par <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
                 </p>
-                
-            <?php if ($connected) { 
-            if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
-                <form action="#" method="post" id="subjects__list__element__delete">
-                    <input type="hidden" name="delete_id_subject" value="<?php echo $values["id"] ?>">
-                    <input type="image" src="img/delete.png" alt="delete">
-                </form>
-                <?php } 
-                } ?>
             </div>
         </div>
-        <?php } ?>
+        <?php }
+        if (count(getSubjects($load)) >= $load) { ?>
         <form action="#" method="post" id="subjects__more_sub">
             <input type="hidden" name="load" value="<?php echo $load; ?>">
             <input type="submit" value="Voir plus">
         </form>
+        <?php } else if(count(getSubjects($load)) == 0) { ?>
+        <p id="messages__no_messages">
+            Il n'y a pas de message dans ce sujet.
+        </p>
+        <?php } ?>
 
     </section>
     <div id="new_subject">

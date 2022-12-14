@@ -5,9 +5,9 @@ ini_set("display_errors", 1);
 session_start();
 
 include_once "app/database.php";
-$connected = False;
-$rights = False;
-$conseiller = False;
+$connected = false;
+$rights = false;
+$conseiller = false;
 
 if (isset($_POST["load"])) {
     $load = $_POST["load"]+50;
@@ -43,7 +43,7 @@ $messages = getMessages($_GET['id'], $load);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width", initial-scale=1.0>
+    <meta name="viewport" content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
     <title><?php print_r($titre); ?> - Forumone</title>
@@ -74,35 +74,49 @@ $messages = getMessages($_GET['id'], $load);
         <?php } ?>
     </header>
     <section id="messages">
+        <div id="messages__home">
+            <a href="index.php" id="messages__home__link">
+                Retour à l'accueil
+            </a>
+        </div>
+        <h1 id="messages__subject_title">
+            <?php echo $titre; ?>
+        </h1>
+        <?php foreach($messages as $values){ ?>
         <div id="messages__list">
-            <?php foreach($messages as $values){ ?>
                 <div id="messages__list__element">
                     <p id="messages__list__element__message">
                         <?php echo htmlspecialchars($values["contenu"]); ?>
                     </p>
-                    <p id="subjects__list__element__name">
-                        <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
-                    </p>
-                <?php if ($connected) { 
-                if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
+                    <?php if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
                     <form action="#" method="post" id="messages__list__element__delete">
                         <input type="hidden" name="delete_id_message" value="<?php echo $values["id"] ?>">
                         <input type="image" id="messages__list__element__delete__image" src="img/delete.png" alt="delete">
                     </form>
                     <?php } ?>
+                    <p id="subjects__list__element__name">
+                        <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
+                    </p>
+                <?php if ($connected) { ?>
                 </div>  
-            <?php } 
-            }?>
-            </div>
-            <form action="#" method="post" id="messages__more_sub">
-                <input type="hidden" name="load" value="<?php echo $load; ?>">
-                <input type="submit" value="Voir plus">
-            </form>
-        <?php if ($connected) { ?>
-        <div id = messages__add> 
-            <form action='#' method="post" id="messages__formu">
-                <input type="textbox" name="write_message" placeholder="Ecrire un message">
-                <input type='submit' name="send_message" value="Envoyez">
+            <?php } ?>
+        </div>
+        <?php }
+        if (count($messages) >= $load) { ?>
+        <form action="#" method="post" id="messages__more_sub">
+            <input type="hidden" name="load" value="<?php echo $load; ?>">
+            <input type="submit" value="Voir plus">
+        </form>
+        <?php } else if(count($messages) == 0) { ?>
+        <p id="messages__no_messages">
+            Il n'y a pas de message dans ce sujet.
+        </p>
+        <?php }
+        if ($connected) { ?>
+        <div id="messages__new_message">
+            <form action='#' method="post" id="messages__new_message__form">
+                <textarea name="write_message" placeholder="Ecrire un message" id="messages__new_message__form__message"></textarea>
+                <input type='submit' name="send_message" value="Poster" id="messages__new_message__form__submit">
             </form>
         </div>
         <?php } ?>

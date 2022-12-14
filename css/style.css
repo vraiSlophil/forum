@@ -8,12 +8,14 @@
 }
 
 input:focus,
-button:focus {
+button:focus,
+textarea:focus {
     outline: none;
 }
 
 input,
-button {
+button,
+textarea {
     background: unset;
     border-radius: unset;
     border: unset;
@@ -80,11 +82,13 @@ body {
 
 #header__links > a,
 #header__user__name__log_out_link,
+#header__user__name__admin_link,
 #new_subject__formu__form__submit,
 #subjects__more_sub > input,
 #messages__more_sub > input,
 #login_form__form__submit,
-#register_form__form__submit {
+#register_form__form__submit,
+#messages__new_message__form__submit {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,16 +104,19 @@ body {
 #messages__more_sub > input,
 #login_form__form__submit,
 #register_form__form__submit,
-#new_subject__formu__form__submit {
+#new_subject__formu__form__submit,
+#messages__new_message__form__submit {
     font-weight: bold;
     margin: unset;
 }
 
-#header__user__name__log_out_link {
+#header__user__name__log_out_link,
+#header__user__name__admin_link {
     padding: 0.6em;
 }
 
-#header__user__name__log_out_link__image {
+#header__user__name__log_out_link__image,
+#header__user__name__admin_link{
     height: 1.2em;
     filter: invert(1);
 }
@@ -128,6 +135,10 @@ body {
     border-radius: 0.8em;
 }
 
+#messages {
+    padding-top: 1em;
+}
+
 #subjects__list,
 #messages__list {
     width: 100%;
@@ -137,51 +148,77 @@ body {
     flex-direction: column;
 }
 
+#messages__subject_title {
+    padding-bottom: 1em;
+    border-bottom: 0.15em solid #303030;
+    width: 100%;
+    text-align: center;
+}
+
 #messages__list__element,
 #subjects__list__element {
     width: 80%;
-    display: grid;
-    grid-template-columns: 80% 20%;
-    grid-template-rows: 3em;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px; 
+    display: flex;
     align-items: center;
+    flex-direction: row;
+    min-height: 3em;
     background-color: #303030;
     margin: 0.5em 0;
     border-radius: 0.3em;
 }
 
-#messages__list__element__delete {
+#messages__list__element__delete,
+#subjects__list__element__delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #A90000;
+    border-radius: 0.3em;
+    cursor: pointer;
+    padding: 0.4em;
+    margin: 0 0.35em;
 }
 
-#messages__list__element__delete__image {
+#messages__list__element__delete__image,
+#subjects__list__element__delete__image {
+    height: 1.4em;
     filter: invert(1);
-    height: 1.5em;
-
 }
 
 #messages__list__element__name,
 #subjects__list__element__name {
-    height: 90%;
+    height: calc(0.9*3em);
     border-left: 0.15em solid #252525;
     display: flex;
     justify-content: start;
     align-items: center;
     padding-left: 1em;
+    min-width: 20%;
+    width: max-content;
 }
 
-#messages__list__element__link,
+#messages__list__element__message,
 #subjects__list__element__link {
     padding-left: 1em;
+    width: 100%;
 }
 
 #subjects__more_sub > input:hover,
 #messages__more_sub > input:hover,
 #login_form__form__submit:hover,
 #new_subject__formu__form__submit:hover,
-#register_form__form__submit:hover {
+#register_form__form__submit:hover,
+#messages__new_message__form__submit:hover {
     text-decoration: underline;
+}
+
+#messages__no_messages {
+    margin: 1em;
+}
+
+#messages__home {
+    width: 100%;
+    padding-left: 1em;
 }
 
 #new_subject__formu,
@@ -193,14 +230,6 @@ body {
     flex-direction: column;
 }
 
-#new_subject__formu__form__name {
-    margin: 0.5em;
-    padding: 0.5em;
-    background-color: #202020;
-    border-radius: 0.3em;
-    min-width: 20em;
-}
-
 #new_subject__error,
 #error_connect__message {
     color: #db1010;
@@ -208,7 +237,7 @@ body {
 }
 
 #new_subject__title {
-    min-width: 20em;
+    min-width: 60%;
 }
 
 
@@ -263,10 +292,42 @@ body {
 #login_form__form__password__password,
 #register_form__form__name__pseudo,
 #register_form__form__confirm_password__password,
-#register_form__form__password__password {
+#register_form__form__password__password,
+#messages__new_message__form__message,
+#new_subject__formu__form__name {
     margin: 0.5em 0;
     padding: 0.5em;
     background-color: #202020;
     border-radius: 0.3em;
+    width: 100%;
+}
+
+#new_subject__formu {
+    width: 60%;
+}
+
+#new_subject__formu__form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
+}
+
+#messages__new_message__form__message {
+    resize: vertical;
+    min-height: 5em;
+    max-height: 30em;
+}
+
+#messages__new_message {
+    width: 80%;
+}
+
+#messages__new_message__form {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
     width: 100%;
 }

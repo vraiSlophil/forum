@@ -2,8 +2,8 @@
 function sql_connect() {
     $dbname = 'forum_no_mb_nl';
     $identifiant = 'root';
-    $motdepasse = '';
-    $port = 3307;
+    $motdepasse = 'Yejequ@4';
+    $port = 3306;
     try { 
         $sch='mysql:host=localhost;dbname='.$dbname.';port='.$port;
         $bdd = new PDO($sch , $identifiant, $motdepasse);
@@ -89,7 +89,7 @@ function checkLogin($pseudo, $password){
     }
     $check = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($check[0]["password"] == md5($password)){
-        return getId($pseudo);
+        return getId($pseudo)[0]["id"];
     } else {
         return 0;
     }
@@ -188,9 +188,9 @@ function allUsers() {
 
 function changePermission($id,$permission) {
     $database = sql_connect();
-    $sql = "UPDATE clients SET permission = :perm WHERE id = :identifiant;";
+    $sql = "UPDATE clients SET permission=:perm WHERE id=:identifiant;";
     $statement = $database->prepare($sql);
-    $statement->bindParam(":perm", $permission, PDO::PARAM_INT);
+    $statement->bindParam(":perm", $permission);
     $statement->bindParam(":identifiant", $id, PDO::PARAM_INT);
     $statement->execute();
 }

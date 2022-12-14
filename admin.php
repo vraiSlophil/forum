@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <?php 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
@@ -43,14 +42,14 @@ if (isset($_POST["conseiller_permission"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/forumone.png">
     <link rel="stylesheet" href="css/style.css">
-    <title>Forumone - Administration</title>
+    <title>Administration - Forumone</title>
 </head>
 <body>
     <header id="header">
         <div id="header__head">
             <img src="img/forumone.png" alt="icon" id="header__head__image">
             <div id="header__head__title">
-                <h1 id="header__head__title__title">Forumone - Administration </h1>
+                <h1 id="header__head__title__title">Forumone</h1>
                 <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
             </div>
             <h2 id="header__head__role"> <?php echo getPermission($_SESSION['login'])[0]['permission']; ?> </h2> 
@@ -67,8 +66,6 @@ if (isset($_POST["conseiller_permission"])) {
                     
                     echo htmlspecialchars(getPermission(getId($values["pseudo"])[0]["id"])[0]["permission"]);
                     $userId = getId($values["pseudo"])[0]["id"];
-                    // print_r(getId($values["pseudo"])[0]["id"]);
-                    // print_r(getPermission(getId($values["pseudo"])[0]["id"])[0]["permission"]);
                      ?>
                 </div>
             
