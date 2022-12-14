@@ -29,7 +29,7 @@ function getPassword($id) {
     $statement = $database->prepare($sql);
     $statement->bindValue(':id', $id, PDO::PARAM_INT);
     $statement->execute();
-    return $statement->fetchAll();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getId($pseudo) {

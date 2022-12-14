@@ -6,31 +6,40 @@ session_start();
 
 include_once "app/database.php";
 
-$rights = True;
+$rights = true;
 
 if (isset($_SESSION['login'])) {
-    if (getPermission($_SESSION['login']) == 'Administrateur' || getPermission($_SESSION['login']) == 'Moderateur') {
+    if (getPermission($_SESSION['login']) == 'administrateur' || getPermission($_SESSION['login']) == 'moderateur') {
+        header("Location: admin.php");
         exit();
     } else {
-        $rights = False;
+        $rights = false;
+        header("Location: index.php");
+        exit();
     }
 }
 
 if (isset($_POST["admin_permission"])) {
     if (isset($_POST["admin_id"])) {
-
+        changePermission($_POST["admin_id"],$_POST["admin_permission"]);
+        header("Location: admin.php");
+        exit();
     }
 }
 
 if (isset($_POST["modo_permission"])) {
     if (isset($_POST["modo_id"])) {
-        
+        changePermission($_POST["modo_id"],$_POST["modo_permission"]);
+        header("Location: admin.php");
+        exit();
     }
 }
 
 if (isset($_POST["conseiller_permission"])) {
     if (isset($_POST["conseiller_id"])) {
-        changePermission($_POST["conseiller_id"],"conseiller");
+        changePermission($_POST["conseiller_id"],$_POST["conseiller_permission"]);
+        header("Location: admin.php");
+        exit();
     }
 }
 
@@ -71,12 +80,12 @@ if (isset($_POST["conseiller_permission"])) {
             
             <div id="list_users__button">
                 <form action="#" method="post">
-                    <input type="hidden" name="admin_permission" value="admin">
+                    <input type="hidden" name="admin_permission" value="administrateur">
                     <input type="hidden" name="admin_id" value="<?php echo $userId; ?>">
                     <input type="submit" id="list_users__admin" value="Administrateur">
                 </form>
                 <form action="#" method="post">
-                    <input type="hidden" name="modo_permission" value="modo">
+                    <input type="hidden" name="modo_permission" value="moderateur">
                     <input type="hidden" name="modo_id"value="<?php echo $userId; ?>">
                     <input type="submit" id="list_users__modo" value="Modérateur">
                 </form>

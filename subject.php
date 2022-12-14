@@ -18,16 +18,16 @@ if (isset($_POST["load"])) {
 $load = 50;
 
 if (isset($_SESSION["login"])) {
-    $connected = True;
-    if (getPermission($_SESSION['login'])[0] == "Moderateur" || getPermission($_SESSION['login'])[0] == 'Administrateur') {
-        $rights = True;
+    $connected = true;
+    if (getPermission($_SESSION['login'])[0] == "moderateur" || getPermission($_SESSION['login'])[0] == 'administrateur') {
+        $rights = true;
     }
 }
 
 if (isset($_POST["delete_id_message"])) {
     $idmsg = $_POST["delete_id_message"];
     $idauteur = getAuteur($idmsg)[0][0];
-    if ( $idauteur == $_SESSION["login"] || $rights) {
+    if ( $idauteur == $_SESSION["login"] || $rights = true) {
         deleteMessage($idmsg);
     }
 }
