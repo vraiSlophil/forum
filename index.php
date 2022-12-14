@@ -9,6 +9,22 @@ include_once "app/database.php";
 $error = false;
 $errorLen = false;
 $errorChar = false;
+$rights = false;
+
+if (isset($_SESSION["login"])) {
+    $connected = True;
+    if (getPermission($_SESSION['login'])[0] == "Moderateur" || getPermission($_SESSION['login'])[0] == 'Administrateur') {
+        $rights = True;
+    }
+}
+
+if (isset($_POST["delete_id_subject"])) {
+    $idsbjct = $_POST["delete_id_subject"];
+    $idauteur = getSubjectAuteur($idsbjct)[0][0];
+    if ( $idauteur == $_SESSION["login"] || $rights) {
+        deleteSubject($idsbjct);
+    }
+}
 
 if (isset($_POST["load"])) {
     $load = $_POST["load"]+20;
@@ -40,7 +56,7 @@ if(isset($_POST['new_subject_name']) && isset($_SESSION["login"])) {
 }
 
 if(isset($_POST["register_pseudo"])){
-    if(!strlen($_POST["register_pseudo"]) > 24) {
+    if(strlen($_POST["register_pseudo"]) > 24) {
         $_SESSION["pseudo_too_long"]=True;
         header("Location: register.php");
         exit();
@@ -122,6 +138,15 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
                 <p id="subjects__list__element__name">
                     par <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
                 </p>
+                
+            <?php if ($connected) { 
+            if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
+                <form action="#" method="post" id="subjects__list__element__delete">
+                    <input type="hidden" name="delete_id_subject" value="<?php echo $values["id"] ?>">
+                    <input type="image" src="img/delete.png" alt="delete">
+                </form>
+                <?php } 
+                } ?>
             </div>
         </div>
         <?php } ?>

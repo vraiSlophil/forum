@@ -11,7 +11,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/forumone.png">
     <link rel="stylesheet" href="css/style.css">
-    <title>Connexion - Forumone</title>
+    <title>Enregistrement - Forumone</title>
 </head>
 <body>
     <header id="header">
@@ -23,29 +23,61 @@ session_start();
             </div>
         </div>
     </header>
-    <?php 
-    if (isset($_SESSION["problem_password"]) && $_SESSION["problem_password"]){
-        echo "Votre confirmation de mot de passe et votre mot de passe ne sont pas les mêmes";
-        unset ($_SESSION["problem_password"]);
-    }
 
-    if (isset($_SESSION["pseudo_too_long"]) && $_SESSION["pseudo_too_long"]){
-        echo "Votre pseudo est trop long";
-        unset ($_SESSION["pseudo_too_long"]);
-    }
-    if (isset($_SESSION["pseudo_not_unique"]) && $_SESSION["pseudo_not_unique"]){
-        echo "Un autre utilisateur utilise déjà votre pseudo";
-        unset ($_SESSION["pseudo_not_unique"]);
-    }
-    ?>
-<form action="index.php" method="post" id="form">
-    <h1>Créer votre pseudo :</h1> 
-    <input type="text" name="register_pseudo" required>
-    <h1>Créer votre mot de passe :</h1>
-    <input type="password" name="register_password" required>
-    <h1>Confirmer votre mot de passe :</h1>
-    <input type="password" name="register_confirm_password" required>
-    <input type="submit" value="Valider">
-</form> 
+    <?php if (isset($_SESSION["problem_password"]) && $_SESSION["problem_password"]){ ?>
+        <div id="error_connect">
+            <p id="error_connect__message">
+            <?php 
+            echo "Votre mot de passe ou votre identifiant n'a pas été trouvé";
+            unset($_SESSION["problem_login"]);
+            ?>
+            </p>
+        </div>
+    <?php } 
+    if (isset($_SESSION["pseudo_too_long"]) && $_SESSION["pseudo_too_long"]){ ?>
+
+        <div id="error_connect">
+            <p id="error_connect__message">
+            <?php 
+            echo "Votre pseudo est trop long";
+            unset ($_SESSION["pseudo_too_long"]);
+            ?>
+            </p>
+        </div>
+
+    <?php } 
+    if (isset($_SESSION["pseudo_not_unique"]) && $_SESSION["pseudo_not_unique"]){ ?>
+
+        <div id="error_connect">
+            <p id="error_connect__message">
+            <?php 
+            echo "Un autre utilisateur utilise déjà votre pseudo";
+            unset ($_SESSION["pseudo_not_unique"]);
+            ?>
+            </p>
+        </div>
+
+    <?php } ?>
+    <section id="register_form">
+        <a href="index.php" id="register_form__home">
+            Retour à l'accueil
+        </a>
+        <form action="index.php" method="post" id="register_form__form">
+            <div id="register_form__form__name">
+                <p>Votre Pseudo :</p>
+                <input type="text" id="register_form__form__name__pseudo" name="register_pseudo" placeholder="Votre pseudo" required>
+            </div>
+            <div id="register_form__form__password">
+                <p>Votre mot de passe :</p>
+                <input type="password" id="register_form__form__password__password" name="register_password" placeholder="Votre mot de passe" required>
+            </div>
+            <div id="register_form__form__confirm_password">
+                <p>Confirmer votre mot de passe :</p>
+                <input type="password" id="register_form__form__confirm_password__password" name="register_confirm_password" placeholder="Confirmez votre mot de passe" required>
+            </div>
+            <input type="submit" id="register_form__form__submit" value="Créer un compte">
+        </form>
+    </section>
+
 </body>
 </html>

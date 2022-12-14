@@ -38,9 +38,7 @@ function getId($pseudo) {
     $statement = $database->prepare($sql);
     $statement->bindValue(':pseudo', $pseudo);
     $statement->execute();
-    while ($row = $statement->fetch()) {
-        return $row[0];
-    }
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function createSubject($sbjct_name, $id) {
@@ -136,6 +134,14 @@ function deleteMessage($idmessage) {
     $statement->execute();
 }
 
+function deleteSubject($idsujet) {
+    $database = sql_connect();
+    $sql = "DELETE FROM sujets WHERE id = :idsujet; DELETE FROM messages WHERE idsujet = :idsujet;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idsujet", $idsujet, PDO::PARAM_INT);
+    $statement->execute();
+}
+
 function getAuteur($idmessage) {
     $database = sql_connect();
     $sql = "SELECT idauteur FROM messages WHERE id = :idmsg;";
@@ -145,12 +151,48 @@ function getAuteur($idmessage) {
     return $statement->fetchAll();
 }
 
-function getTitle($idsujet) {
+function getSubjectAuteur($idsujet) {
     $database = sql_connect();
-    $sql = "SELECT title FROM sujets WHERE id = :idsjt;";
+    $sql = "SELECT idauteur FROM sujets WHERE id = :idsujet;";
     $statement = $database->prepare($sql);
-    $statement->bindParam(":idsjt", $idsujet, PDO::PARAM_INT);
+    $statement->bindParam(":idsujet", $idsujet, PDO::PARAM_INT);
     $statement->execute();
     return $statement->fetchAll();
 }
+
+function getTitle($idsujet) {
+    $database = sql_connect();
+    $sql = "SELECT titre FROM sujets WHERE id = :idsjt;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idsjt", $idsujet, PDO::PARAM_INT);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPermission($iduser) {
+    $database = sql_connect();
+    $sql = "SELECT permission FROM clients WHERE id = :iduser;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":iduser", $iduser, PDO::PARAM_INT);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function allUsers() {
+    $database = sql_connect();
+    $sql = "SELECT pseudo FROM clients;";
+    $statement = $database->prepare($sql);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function changePermission($id,$permission) {
+    $database = sql_connect();
+    $sql = "UPDATE clients SET permission = :perm WHERE id = :identifiant;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":perm", $permission, PDO::PARAM_INT);
+    $statement->bindParam(":identifiant", $id, PDO::PARAM_INT);
+    $statement->execute();
+}
 ?>
+
