@@ -15,7 +15,8 @@ $connected = false;
 
 if (isset($_SESSION["login"])) {
     $connected = true;
-    if (getPermission($_SESSION['login'])[0]["permission"] == "moderateur" || getPermission($_SESSION['login'])[0]["permission"] == 'administrateur') {
+    $permission = getPermission($_SESSION["login"])[0]["permission"];
+    if ($permission != "administrateur" || $permission != "moderateur") {
         $rights = true;
     }
 }
@@ -123,7 +124,7 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
                 </a>
                 <?php if ($rights) { ?>
                 <a href="admin.php" id="header__user__name__admin_link">
-                    <img src="img/personal-security.png" alt="log out image" id="header__user__name__admin_link__image">
+                    <img src="img/personal-security.png" alt="admin image" id="header__user__name__admin_link__image">
                 </a>
                 <?php } ?>
             </div>

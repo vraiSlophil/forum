@@ -110,14 +110,21 @@ body {
     margin: unset;
 }
 
-#header__user__name__log_out_link,
-#header__user__name__admin_link {
-    padding: 0.6em;
+#header__user__name__log_out_link {
+    padding: 0.7em;
 }
 
-#header__user__name__log_out_link__image,
-#header__user__name__admin_link{
+#header__user__name__admin_link {
+    padding: 0.7em;
+    margin-left: unset;
+}
+
+#header__user__name__log_out_link__image {
     height: 1.2em;
+    filter: invert(1);
+}
+#header__user__name__admin_link__image {
+    height: 1.4em;
     filter: invert(1);
 }
 

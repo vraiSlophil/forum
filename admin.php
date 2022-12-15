@@ -6,37 +6,29 @@ session_start();
 
 include_once "app/database.php";
 
-$rights = true;
+$rights = false;
+$connected = false;
+$permission = "user";
 
-if (isset($_SESSION['login'])) {
-    if (getPermission($_SESSION['login']) == 'administrateur' || getPermission($_SESSION['login']) == 'moderateur') {
-        header("Location: admin.php");
-        exit();
-    } else {
-        $rights = false;
+if (isset($_SESSION["login"])) {
+    $permission = getPermission($_SESSION["login"])[0]["permission"];
+    if ($permission == "administrateur" || $permission == "moderateur") {
         header("Location: index.php");
         exit();
     }
+    $connected = true;
 }
 
-if (isset($_POST["admin_permission"])) {
-    if (isset($_POST["admin_id"])) {
-        changePermission($_POST["admin_id"],$_POST["admin_permission"]);
+if ($permission == "administrateur" && $connected) {
+    if (isset($_POST["admin_permission"]) && isset($_POST["admin_id"])) {
+        changePermission($_POST["admin_id"], $_POST["admin_permission"]);
         header("Location: admin.php");
         exit();
-    }
-}
-
-if (isset($_POST["modo_permission"])) {
-    if (isset($_POST["modo_id"])) {
+    } else if (isset($_POST["modo_permission"]) || isset($_POST["modo_id"])) {
         changePermission($_POST["modo_id"],$_POST["modo_permission"]);
         header("Location: admin.php");
         exit();
-    }
-}
-
-if (isset($_POST["conseiller_permission"])) {
-    if (isset($_POST["conseiller_id"])) {
+    } else if (isset($_POST["conseiller_permission"]) || isset($_POST["conseiller_id"])) {
         changePermission($_POST["conseiller_id"],$_POST["conseiller_permission"]);
         header("Location: admin.php");
         exit();
@@ -61,12 +53,12 @@ if (isset($_POST["conseiller_permission"])) {
                 <h1 id="header__head__title__title">Forumone</h1>
                 <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
             </div>
-            <h2 id="header__head__role"> <?php echo getPermission($_SESSION['login'])[0]['permission']; ?> </h2> 
+<!--            <h2 id="header__head__role"> --><?php //echo getPermission($_SESSION["login"])[0]["permission"]; ?><!-- </h2>-->
         </div>
     </header>
     <section id="list_users">
 
-        <?php 
+        <?php
             foreach(allUsers() as $values) { ?>
             <div id="list_users__list_pseudo">
                 <?php echo htmlspecialchars($values["pseudo"]); ?>
@@ -86,7 +78,7 @@ if (isset($_POST["conseiller_permission"])) {
                 </form>
                 <form action="#" method="post">
                     <input type="hidden" name="modo_permission" value="moderateur">
-                    <input type="hidden" name="modo_id"value="<?php echo $userId; ?>">
+                    <input type="hidden" name="modo_id" value="<?php echo $userId; ?>">
                     <input type="submit" id="list_users__modo" value="Modérateur">
                 </form>
                 <form action="#" method="post">
