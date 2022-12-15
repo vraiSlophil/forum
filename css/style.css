@@ -147,7 +147,8 @@ body {
 }
 
 #subjects__list,
-#messages__list {
+#messages__list,
+#users__list {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -163,7 +164,8 @@ body {
 }
 
 #messages__list__element,
-#subjects__list__element {
+#subjects__list__element,
+#users__list__element {
     width: 80%;
     display: flex;
     align-items: center;
@@ -337,4 +339,24 @@ body {
     align-items: end;
     flex-direction: column;
     width: 100%;
+}
+
+#users__list__element {
+    justify-content: space-between;
+}
+
+#users__list__element__infos {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-direction: row;
+    min-width: 15%;
+    width: max-content;
+    margin: 0 1em;
+}
+
+#users__list__forms {
+    padding: 0 1em;
+    height: 90%;
+    border-left: 0.15em solid #252525;
 }

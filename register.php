@@ -28,7 +28,7 @@ session_start();
         <div id="error_connect">
             <p id="error_connect__message">
             <?php 
-            echo "Votre mot de passe ou votre identifiant n'a pas été trouvé";
+            echo "Votre mot de passe n'est pas le même dans les deux champs.";
             unset($_SESSION["problem_login"]);
             ?>
             </p>
@@ -51,7 +51,7 @@ session_start();
         <div id="error_connect">
             <p id="error_connect__message">
             <?php 
-            echo "Un autre utilisateur utilise déjà votre pseudo";
+            echo "Ce pseudo est déjà présent dans notre base de données, veuillez en choisir un autre.";
             unset ($_SESSION["pseudo_not_unique"]);
             ?>
             </p>
@@ -64,7 +64,7 @@ session_start();
         </a>
         <form action="index.php" method="post" id="register_form__form">
             <div id="register_form__form__name">
-                <p>Votre Pseudo :</p>
+                <p>Votre pseudo :</p>
                 <input type="text" id="register_form__form__name__pseudo" name="register_pseudo" placeholder="Votre pseudo" required>
             </div>
             <div id="register_form__form__password">

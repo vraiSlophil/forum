@@ -84,25 +84,25 @@ $messages = getMessages($_GET['id'], $load);
         </h1>
         <?php foreach($messages as $values){ ?>
         <div id="messages__list">
-                <div id="messages__list__element">
-                    <p id="messages__list__element__message">
-                        <?php echo htmlspecialchars($values["contenu"]); ?>
-                    </p>
-                    <?php if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
-                    <form action="#" method="post" id="messages__list__element__delete">
-                        <input type="hidden" name="delete_id_message" value="<?php echo $values["id"] ?>">
-                        <input type="image" id="messages__list__element__delete__image" src="img/delete.png" alt="delete">
-                    </form>
-                    <?php } ?>
-                    <p id="subjects__list__element__name">
-                        <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
-                    </p>
-                <?php if ($connected) { ?>
-                </div>  
-            <?php } ?>
+            <div id="messages__list__element">
+                <p id="messages__list__element__message">
+                    <?php echo htmlspecialchars($values["contenu"]); ?>
+                </p>
+            <?php if ($connected) {
+                if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
+                <form action="#" method="post" id="messages__list__element__delete">
+                    <input type="hidden" name="delete_id_message" value="<?php echo $values["id"] ?>">
+                    <input type="image" id="messages__list__element__delete__image" src="img/delete.png" alt="delete">
+                </form>
+                <?php }
+            } ?>
+                <p id="subjects__list__element__name">
+                    <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
+                </p>
+            </div>
+        <?php } ?>
         </div>
-        <?php }
-        if (count($messages) >= $load) { ?>
+        <?php if (count($messages) >= $load) { ?>
         <form action="#" method="post" id="messages__more_sub">
             <input type="hidden" name="load" value="<?php echo $load; ?>">
             <input type="submit" value="Voir plus">

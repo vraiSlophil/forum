@@ -13,10 +13,11 @@ $permission = "user";
 if (isset($_SESSION["login"])) {
     $permission = getPermission($_SESSION["login"])[0]["permission"];
     if ($permission == "administrateur" || $permission == "moderateur") {
+        $connected = true;
+    } else {
         header("Location: index.php");
         exit();
     }
-    $connected = true;
 }
 
 if ($permission == "administrateur" && $connected) {
@@ -56,43 +57,43 @@ if ($permission == "administrateur" && $connected) {
 <!--            <h2 id="header__head__role"> --><?php //echo getPermission($_SESSION["login"])[0]["permission"]; ?><!-- </h2>-->
         </div>
     </header>
-    <section id="list_users">
-
-        <?php
-            foreach(allUsers() as $values) { ?>
-            <div id="list_users__list_pseudo">
-                <?php echo htmlspecialchars($values["pseudo"]); ?>
-                <div>
-                    <?php 
-                    
-                    echo htmlspecialchars(getPermission(getId($values["pseudo"])[0]["id"])[0]["permission"]);
-                    $userId = getId($values["pseudo"])[0]["id"];
-                     ?>
+    <section id="users__list">
+        <?php foreach(allUsers() as $values) { ?>
+            <div id="users__list__element">
+                <div id="users__list__element__infos">
+                    <p id="users__list__element__infos__pseudo">
+                        <?php echo htmlspecialchars($values["pseudo"]); ?>
+                    </p>
+                    <p>-</p>
+                    <div id="users__list__element__infos__permission">
+                        <?php
+                        echo htmlspecialchars(getPermission(getId($values["pseudo"])[0]["id"])[0]["permission"]);
+                        $userId = getId($values["pseudo"])[0]["id"];
+                         ?>
+                    </div>
                 </div>
-            
-            <div id="list_users__button">
-                <form action="#" method="post">
+            <div id="users__list__forms">
+                <?php if ($permission == "administrateur" && $connected) { ?>
+                <form action="#" method="post" id="users__list__forms__administrateur">
                     <input type="hidden" name="admin_permission" value="administrateur">
                     <input type="hidden" name="admin_id" value="<?php echo $userId; ?>">
-                    <input type="submit" id="list_users__admin" value="Administrateur">
+                    <input type="submit" id="users__list__admin" value="Administrateur">
                 </form>
-                <form action="#" method="post">
+                <form action="#" method="post" id="users__list__forms__moderateur">
                     <input type="hidden" name="modo_permission" value="moderateur">
                     <input type="hidden" name="modo_id" value="<?php echo $userId; ?>">
-                    <input type="submit" id="list_users__modo" value="Modérateur">
+                    <input type="submit" id="users__list__modo" value="Modérateur">
                 </form>
-                <form action="#" method="post">
+                <?php } ?>
+                <form action="#" method="post" id="users__list__forms__conseiller">
                     <input type="hidden" name="conseiller_permission" value="conseiller">
                     <input type="hidden" name="conseiller_id" value="<?php echo $userId; ?>">
-                    <input type="submit" id="list_users__conseiller" value="Conseiller">
+                    <input type="submit" id="users__list__conseiller" value="Conseiller">
                 </form>
                 </div>
             </div>
             <?php } ?>
-        
-        
     </section>
 </body>
-
 </html>
 

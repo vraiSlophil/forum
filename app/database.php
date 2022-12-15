@@ -62,10 +62,14 @@ function createUser($pseudo, $password) {
     $statement->bindParam(':pseudo', $pseudo);
     $md5 = md5($password);
     $statement->bindParam(':password', $md5);
-    $str = "user";
+    $str = "utilisateur";
     $statement->bindParam(':permission', $str);
-    $statement->execute();
-    return $statement->rowCount();
+    try {
+        $statement->execute();
+    } catch (Exception $e) {
+        return 0;
+    }
+    return 1;
 }
 
 function getSubjects($limit) {

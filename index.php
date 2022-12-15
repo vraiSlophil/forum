@@ -16,7 +16,7 @@ $connected = false;
 if (isset($_SESSION["login"])) {
     $connected = true;
     $permission = getPermission($_SESSION["login"])[0]["permission"];
-    if ($permission != "administrateur" || $permission != "moderateur") {
+    if ($permission == "administrateur" || $permission == "moderateur") {
         $rights = true;
     }
 }
@@ -24,8 +24,10 @@ if (isset($_SESSION["login"])) {
 if (isset($_POST["delete_id_subject"])) {
     $idsbjct = $_POST["delete_id_subject"];
     $idauteur = getSubjectAuteur($idsbjct)[0][0];
-    if ( $idauteur == $_SESSION["login"] || $rights) {
+    if ($idauteur == $_SESSION["login"] || $rights) {
         deleteSubject($idsbjct);
+        header("Location: index.php");
+        exit();
     }
 }
 
@@ -164,7 +166,7 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
         </form>
         <?php } else if(count(getSubjects($load)) == 0) { ?>
         <p id="messages__no_messages">
-            Il n'y a pas de message dans ce sujet.
+            Il n'y a pas de sujets.
         </p>
         <?php } ?>
 
