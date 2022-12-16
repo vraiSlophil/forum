@@ -29,12 +29,15 @@ if (isset($_POST["delete_id_message"])) {
     $idauteur = getAuteur($idmsg)[0][0];
     if ( $idauteur == $_SESSION["login"] || $rights = true) {
         deleteMessage($idmsg);
+        header("Location: subject.php");
+        exit();
     }
 }
 
 if (isset($_POST["write_message"])) {
     addMessages($_SESSION['login'], $_GET['id'], $_POST["write_message"]);
 }
+
 
 $titre = htmlspecialchars(getTitle($_GET['id'])[0]["titre"]);
 $messages = getMessages($_GET['id'], $load);
@@ -46,6 +49,7 @@ $messages = getMessages($_GET['id'], $load);
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="img/forumone.png">
     <title><?php print_r($titre); ?> - Forumone</title>
 </head>
 <body>
@@ -91,7 +95,7 @@ $messages = getMessages($_GET['id'], $load);
             <?php if ($connected) {
                 if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
                 <form action="#" method="post" id="messages__list__element__delete">
-                    <input type="hidden" name="delete_id_message" value="<?php echo $values["id"] ?>">
+                    <input type="hidden" name="delete_id_message" value="<?php echo $values["id"]; ?>">
                     <input type="image" id="messages__list__element__delete__image" src="img/delete.png" alt="delete">
                 </form>
                 <?php }

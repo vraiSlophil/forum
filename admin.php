@@ -33,6 +33,10 @@ if ($permission == "administrateur" && $connected) {
         changePermission($_POST["conseiller_id"],$_POST["conseiller_permission"]);
         header("Location: admin.php");
         exit();
+    } else if (isset($_POST["utilisateur_permission"]) || isset($_POST["utilisateur_id"])) {
+        changePermission($_POST["utilisateur_id"],$_POST["utilisateur_permission"]);
+        header("Location: admin.php");
+        exit();
     }
 }
 
@@ -54,8 +58,10 @@ if ($permission == "administrateur" && $connected) {
                 <h1 id="header__head__title__title">Forumone</h1>
                 <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
             </div>
-<!--            <h2 id="header__head__role"> --><?php //echo getPermission($_SESSION["login"])[0]["permission"]; ?><!-- </h2>-->
         </div>
+        <a href="index.php" id="register_form__home">
+            Retour à l'accueil
+        </a>
     </header>
     <section id="users__list">
         <?php foreach(allUsers() as $values) { ?>
@@ -64,7 +70,6 @@ if ($permission == "administrateur" && $connected) {
                     <p id="users__list__element__infos__pseudo">
                         <?php echo htmlspecialchars($values["pseudo"]); ?>
                     </p>
-                    <p>-</p>
                     <div id="users__list__element__infos__permission">
                         <?php
                         echo htmlspecialchars(getPermission(getId($values["pseudo"])[0]["id"])[0]["permission"]);
@@ -90,6 +95,17 @@ if ($permission == "administrateur" && $connected) {
                     <input type="hidden" name="conseiller_id" value="<?php echo $userId; ?>">
                     <input type="submit" id="users__list__conseiller" value="Conseiller">
                 </form>
+                <form action="#" method="post" id="users__list__forms__utilisateur">
+                    <input type="hidden" name="utilisateur_permission" value="utilisateur">
+                    <input type="hidden" name="utilisateur_id" value="<?php echo $userId; ?>">
+                    <input type="submit" id="users__list__utilisateur" value="Utilisateur">
+                </form>
+                <?php if (($permission == "administrateur" || $permission == "moderateur") && $connected) { ?>
+                <form action="#" method="post" id="users__list__forms__delete">
+                    <input type="hidden" name="delete_id_user" value="<?php echo $userId; ?>">
+                    <input type="image" id="users__list__forms__delete__image" src="img/delete.png" alt="delete">
+                </form>
+                <?php } ?>
                 </div>
             </div>
             <?php } ?>

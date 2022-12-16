@@ -99,18 +99,9 @@ function checkLogin($pseudo, $password){
     }
 }
 
-function getSubjectName($id) {
-    $database = sql_connect();
-    $sql = "SELECT titre FROM sujets WHERE id = :id;";
-    $statement = $database->prepare($sql);
-    $statement->bindParam(":id", $id, PDO::PARAM_INT);
-    $statement->execute();
-    return $statement->fetchAll();
-}
-
 function getMessages($id, $limit) {
     $database = sql_connect();
-    $sql = "SELECT id, idauteur, contenu FROM messages WHERE idsujet = :idsbjct ORDER BY id DESC LIMIT :limit;";
+    $sql = "SELECT id, idauteur, contenu FROM messages WHERE idsujet = :idsbjct ORDER BY id ASC LIMIT :limit;";
     $statement = $database->prepare($sql);
     $statement->bindParam(":idsbjct", $id, PDO::PARAM_INT);
     $statement->bindParam(":limit", $limit, PDO::PARAM_INT);
@@ -170,6 +161,11 @@ function getTitle($idsujet) {
     $statement = $database->prepare($sql);
     $statement->bindParam(":idsjt", $idsujet, PDO::PARAM_INT);
     $statement->execute();
+    try {
+        $statement->execute();
+    } catch (Exception $e) {
+        return 0;
+    }
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
 

@@ -88,7 +88,12 @@ body {
 #messages__more_sub > input,
 #login_form__form__submit,
 #register_form__form__submit,
-#messages__new_message__form__submit {
+#messages__new_message__form__submit,
+#users__list__admin,
+#users__list__modo,
+#users__list__conseiller,
+#users__list__utilisateur,
+#users__list__element__infos__permission {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -105,7 +110,12 @@ body {
 #login_form__form__submit,
 #register_form__form__submit,
 #new_subject__formu__form__submit,
-#messages__new_message__form__submit {
+#messages__new_message__form__submit,
+#users__list__admin,
+#users__list__modo,
+#users__list__conseiller,
+#users__list__utilisateur,
+#users__list__element__infos__permission {
     font-weight: bold;
     margin: unset;
 }
@@ -177,7 +187,8 @@ body {
 }
 
 #messages__list__element__delete,
-#subjects__list__element__delete {
+#subjects__list__element__delete,
+#users__list__forms__delete {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -189,7 +200,8 @@ body {
 }
 
 #messages__list__element__delete__image,
-#subjects__list__element__delete__image {
+#subjects__list__element__delete__image,
+#users__list__forms__delete__image {
     height: 1.4em;
     filter: invert(1);
 }
@@ -217,7 +229,11 @@ body {
 #login_form__form__submit:hover,
 #new_subject__formu__form__submit:hover,
 #register_form__form__submit:hover,
-#messages__new_message__form__submit:hover {
+#messages__new_message__form__submit:hover,
+#users__list__admin:hover,
+#users__list__modo:hover,
+#users__list__conseiller:hover,
+#users__list__forms__utilisateur:hover {
     text-decoration: underline;
 }
 
@@ -351,12 +367,33 @@ body {
     align-content: center;
     flex-direction: row;
     min-width: 15%;
-    width: max-content;
+    width: 100%;
     margin: 0 1em;
 }
 
 #users__list__forms {
-    padding: 0 1em;
     height: 90%;
     border-left: 0.15em solid #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+#users__list__forms__administrateur,
+#users__list__forms__moderateur,
+#users__list__forms__conseiller,
+#users__list__forms__utilisateur {
+    margin: 0 1em;
+}
+
+#users__list__element__infos__pseudo {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+
+#users__list__element__infos__permission {
+    cursor: unset;
+    background-color: goldenrod;
 }
