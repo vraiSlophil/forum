@@ -4,6 +4,11 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 session_start();
 
+if (!isset($_GET["id"])) {
+    header("Location: index.php");
+    exit();
+}
+
 include_once "app/database.php";
 $connected = false;
 $rights = false;
@@ -11,7 +16,7 @@ $conseiller = false;
 
 if (isset($_POST["load"])) {
     $load = $_POST["load"]+50;
-    header("Location: subject.php");
+    header("Location: subject.php?id=" .$_GET["id"]);
     exit();
 }
 
@@ -29,13 +34,21 @@ if (isset($_POST["delete_id_message"])) {
     $idauteur = getAuteur($idmsg)[0][0];
     if ( $idauteur == $_SESSION["login"] || $rights = true) {
         deleteMessage($idmsg);
-        header("Location: subject.php");
+        header("Location: subject.php?id=" .$_GET["id"]);
         exit();
     }
 }
 
+if (isset($_POST["like_message_id"])) {
+    modifyLikes($_POST["like_message_id"], $_SESSION["login"]);
+    header("Location: subject.php?id=" .$_GET["id"]);
+    exit();
+}
+
 if (isset($_POST["write_message"])) {
     addMessages($_SESSION['login'], $_GET['id'], $_POST["write_message"]);
+    header("Location: subject.php?id=" .$_GET["id"]);
+    exit();
 }
 
 
@@ -103,10 +116,13 @@ $messages = getMessages($_GET['id'], $load);
                 <p id="messages__list__element__name">
                     <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
                 </p>
-                <p id="messages__list__element__like">
-                    <?php echo getLikes($values["id"])[0]["COUNT(*)"]; ?>
-                </p>
-                <button id="messages__list_element__like_button" onclick="dsl('messages__list__element__like', <?php echo $values['id'] ?>);">Like</button>
+                <form action="#" method="post" id="messages__list__element__like_form">
+                    <p id="messages__list__element__like_form__like">
+                        <?php echo getLikes($values["id"])[0]["COUNT(*)"]; ?>
+                    </p>
+                    <input type="hidden" name="like_message_id" value="<?php echo $values['id']; ?>">
+                    <input type="image" id="messages__list__element__like_form__image" src="img/like.png">
+                </form>
             </div>
         <?php } ?>
         </div>
@@ -129,23 +145,21 @@ $messages = getMessages($_GET['id'], $load);
         </div>
         <?php } ?>
     </section>
-
-<script>
-    function dsl(idmsg) {
-        let element = document.getElementById("messages__list__element__like");
-        let likes = element.innerHTML;
-        if (isNaN(parseInt(likes))) {
-            return;
-        }
-        console.log("clique like4");
-        fetch('script.php', {
-            method: 'POST',
-            body: `id_message=${idmsg}`
-        });
-        element.innerHTML = "" + (parseInt(likes) + 1);
-
-    }
-</script>
-
+<!--<script>-->
+<!--    function dsl(idmsg) {-->
+<!--        let element = document.getElementById("messages__list__element__like");-->
+<!--        let likes = element.innerHTML;-->
+<!--        if (isNaN(parseInt(likes))) {-->
+<!--            return;-->
+<!--        }-->
+<!--        console.log("clique like4");-->
+<!--        fetch('script.php', {-->
+<!--            method: 'POST',-->
+<!--            body: `id_message=${idmsg}`-->
+<!--        });-->
+<!--        element.innerHTML = "" + (parseInt(likes) + 1);-->
+<!---->
+<!--    }-->
+<!--</script>-->
 </body>
 </html>

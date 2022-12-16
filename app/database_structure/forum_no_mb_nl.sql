@@ -29,22 +29,22 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `clients`;
 CREATE TABLE IF NOT EXISTS `clients` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pseudo` varchar(24) NOT NULL,
-  `password` text NOT NULL,
-  `date` date NOT NULL,
-  `permission` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `pseudo` (`pseudo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `pseudo` varchar(24) NOT NULL,
+    `password` text NOT NULL,
+    `date` date NOT NULL,
+    `permission` text NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `pseudo` (`pseudo`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `clients`
 --
 
 INSERT INTO `clients` (`id`, `pseudo`, `password`, `date`, `permission`) VALUES
-(3, 'test', '5f4dcc3b5aa765d61d8327deb882cf99', '2022-12-09', 'utilisateur'),
-(9, 'Slophil', '5f4dcc3b5aa765d61d8327deb882cf99', '2022-12-09', 'administrateur');
+                                                                             (3, 'test', '5f4dcc3b5aa765d61d8327deb882cf99', '2022-12-09', 'utilisateur'),
+                                                                             (9, 'Slophil', '5f4dcc3b5aa765d61d8327deb882cf99', '2022-12-09', 'administrateur');
 
 -- --------------------------------------------------------
 
@@ -54,11 +54,11 @@ INSERT INTO `clients` (`id`, `pseudo`, `password`, `date`, `permission`) VALUES
 
 DROP TABLE IF EXISTS `likes`;
 CREATE TABLE IF NOT EXISTS `likes` (
-  `idmessage` int(11) NOT NULL,
-  `iduser` int(11) NOT NULL,
-  KEY `iduser` (`iduser`),
-  KEY `idmessage` (`idmessage`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `idmessage` int(11) NOT NULL,
+    `iduser` int(11) NOT NULL,
+    KEY `iduser` (`iduser`),
+    KEY `idmessage` (`idmessage`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -68,14 +68,14 @@ CREATE TABLE IF NOT EXISTS `likes` (
 
 DROP TABLE IF EXISTS `messages`;
 CREATE TABLE IF NOT EXISTS `messages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `idauteur` int(11) NOT NULL,
-  `idsujet` int(11) NOT NULL,
-  `contenu` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idauteur` (`idauteur`),
-  KEY `idsujet` (`idsujet`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `idauteur` int(11) NOT NULL,
+    `idsujet` int(11) NOT NULL,
+    `contenu` text NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idauteur` (`idauteur`),
+    KEY `idsujet` (`idsujet`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -85,13 +85,13 @@ CREATE TABLE IF NOT EXISTS `messages` (
 
 DROP TABLE IF EXISTS `sujets`;
 CREATE TABLE IF NOT EXISTS `sujets` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `idauteur` int(11) NOT NULL,
-  `titre` varchar(128) NOT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idauteur` (`idauteur`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `idauteur` int(11) NOT NULL,
+    `titre` varchar(128) NOT NULL,
+    `date` date NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idauteur` (`idauteur`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Contraintes pour les tables déchargées
@@ -101,14 +101,14 @@ CREATE TABLE IF NOT EXISTS `sujets` (
 -- Contraintes pour la table `likes`
 --
 ALTER TABLE `likes`
-  ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `clients` (`id`) ON DELETE CASCADE,
+    ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `clients` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`idmessage`) REFERENCES `messages` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `messages`
 --
 ALTER TABLE `messages`
-  ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`idauteur`) REFERENCES `clients` (`id`),
+    ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`idauteur`) REFERENCES `clients` (`id`),
   ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`idsujet`) REFERENCES `sujets` (`id`);
 COMMIT;
 

@@ -220,17 +220,17 @@ function modifyLikes($idmessage, $idauteur) {
             $statement->bindParam(":idaut", $idauteur, PDO::PARAM_INT);
             $statement->bindParam(":idmess", $idmessage, PDO::PARAM_INT);
             $statement->execute();
-            return true;
+            return false;
         }
     }
     // Sinon, il va ajouter un like à ce message
 
-    $sql = "INSERT INTO likes (idmessage,:iduser) VALUES (:idmess,:idaut);";
+    $sql = "INSERT INTO likes (idmessage, iduser) VALUES (:idmess,:idaut);";
     $statement = $database->prepare($sql);
     $statement->bindParam(":idaut", $idauteur, PDO::PARAM_INT);
     $statement->bindParam(":idmess", $idmessage, PDO::PARAM_INT);
     $statement->execute();
-    return false;
+    return true;
 }
 
 function deleteUser($iduser) {
