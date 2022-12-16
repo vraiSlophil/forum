@@ -100,9 +100,13 @@ $messages = getMessages($_GET['id'], $load);
                 </form>
                 <?php }
             } ?>
-                <p id="subjects__list__element__name">
+                <p id="messages__list__element__name">
                     <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
                 </p>
+                <p id="messages__list__element__like">
+                    <?php echo getLikes($values["id"])[0]["COUNT(*)"]; ?>
+                </p>
+                <button id="messages__list_element__like_button" onclick="dsl('messages__list__element__like', <?php echo $values['id'] ?>);">Like</button>
             </div>
         <?php } ?>
         </div>
@@ -125,5 +129,23 @@ $messages = getMessages($_GET['id'], $load);
         </div>
         <?php } ?>
     </section>
+
+<script>
+    function dsl(idmsg) {
+        let element = document.getElementById("messages__list__element__like");
+        let likes = element.innerHTML;
+        if (isNaN(parseInt(likes))) {
+            return;
+        }
+        console.log("clique like4");
+        fetch('script.php', {
+            method: 'POST',
+            body: `id_message=${idmsg}`
+        });
+        element.innerHTML = "" + (parseInt(likes) + 1);
+
+    }
+</script>
+
 </body>
 </html>

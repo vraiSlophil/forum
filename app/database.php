@@ -194,5 +194,52 @@ function changePermission($id,$permission) {
     $statement->bindParam(":identifiant", $id, PDO::PARAM_INT);
     $statement->execute();
 }
+
+function getLikes($idmsg) {
+    $database = sql_connect();
+    $sql = "SELECT COUNT(*) FROM likes WHERE idmessage = :idmsg;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idmsg", $idmsg, PDO::PARAM_INT);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function modifyLikes($idmessage, $idauteur) {
+    $database = sql_connect();
+    $sql = "SELECT idmessage FROM likes WHERE iduser = :idaut;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idaut", $idauteur, PDO::PARAM_INT);
+    $statement->execute();
+    $fetch = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($fetch as $values) {
+        // Si le client a déjà liké ce message, on supprimer le like qu'il a mis
+        if ($values["idmessage"] == $idmessage) {
+            $sql = "DELETE FROM likes WHERE idmessage = :idmess and iduser = :idaut;";
+            $statement = $database->prepare($sql);
+            $statement->bindParam(":idaut", $idauteur, PDO::PARAM_INT);
+            $statement->bindParam(":idmess", $idmessage, PDO::PARAM_INT);
+            $statement->execute();
+            return true;
+        }
+    }
+    // Sinon, il va ajouter un like à ce message
+
+    $sql = "INSERT INTO likes (idmessage,:iduser) VALUES (:idmess,:idaut);";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":idaut", $idauteur, PDO::PARAM_INT);
+    $statement->bindParam(":idmess", $idmessage, PDO::PARAM_INT);
+    $statement->execute();
+    return false;
+}
+
+function deleteUser($iduser) {
+    $database = sql_connect();
+    $sql = "DELETE FROM clients WHERE id = :iduser;";
+    $statement = $database->prepare($sql);
+    $statement->bindParam(":iduser",$iduser,PDO::PARAM_INT);
+    $statement->execute();
+}
+
 ?>
 
