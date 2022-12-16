@@ -8,7 +8,13 @@ include_once "app/database.php";
 
 $rights = false;
 $connected = false;
-$permission = "user";
+$permission = "utilisateur";
+
+if (isset($_POST["delete_id_user"])) {
+    deleteUser($_POST["delete_id_user"]);
+    header("Location: admin.php");
+    exit();
+}
 
 if (isset($_SESSION["login"])) {
     $permission = getPermission($_SESSION["login"])[0]["permission"];
@@ -112,4 +118,3 @@ if ($permission == "administrateur" && $connected) {
     </section>
 </body>
 </html>
-
