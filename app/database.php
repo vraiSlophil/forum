@@ -4,8 +4,8 @@ class Database {
 
     private $dbname = 'forum_no_mb_nl';
     private $id = 'root';
-    private $password = 'Yejequ@4';
-    private $port = 3306;
+    private $password = '';
+    private $port = 3307;
     public function sql_connect() {
         try {
             $sch='mysql:host=localhost;dbname='.$this->dbname.';port='.$this->port;
