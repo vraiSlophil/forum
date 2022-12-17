@@ -303,7 +303,6 @@ body {
     min-width: 60%;
 }
 
-
 #error_connect {
     width: 40%;
     margin: 4em auto 0 auto;
@@ -405,13 +404,14 @@ body {
     align-content: center;
     flex-direction: row;
     min-width: 15%;
+    max-width: 42%;
     width: 100%;
-    margin: 0 1em;
+    padding: 0 1em;
+    border-right: 0.15em solid #252525;
 }
 
 #users__list__forms {
     height: 90%;
-    border-left: 0.15em solid #252525;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -433,7 +433,7 @@ body {
 
 #users__list__element__infos__permission {
     cursor: unset;
-    background-color: goldenrod;
+    background-color: #906d15;
 }
 
 #messages__list__element__like_form,

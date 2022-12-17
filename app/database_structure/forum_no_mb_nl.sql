@@ -36,15 +36,13 @@ CREATE TABLE IF NOT EXISTS `clients` (
     `permission` text NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `pseudo` (`pseudo`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `clients`
 --
 
-INSERT INTO `clients` (`id`, `pseudo`, `password`, `date`, `permission`) VALUES
-                                                                             (3, 'test', '5f4dcc3b5aa765d61d8327deb882cf99', '2022-12-09', 'utilisateur'),
-                                                                             (9, 'Slophil', '5f4dcc3b5aa765d61d8327deb882cf99', '2022-12-09', 'administrateur');
+INSERT INTO `clients` (`id`, `pseudo`, `password`, `date`, `permission`) VALUES (1, 'administrateur', '5f4dcc3b5aa765d61d8327deb882cf99', '2022-12-09', 'administrateur');
 
 -- --------------------------------------------------------
 
@@ -75,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
     PRIMARY KEY (`id`),
     KEY `idauteur` (`idauteur`),
     KEY `idsujet` (`idsujet`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -91,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `sujets` (
     `date` date NOT NULL,
     PRIMARY KEY (`id`),
     KEY `idauteur` (`idauteur`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Contraintes pour les tables déchargées

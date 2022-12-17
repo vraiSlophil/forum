@@ -3,42 +3,49 @@
 session_start();
 
 include_once "app/database.php";
-
+$database = new Database();
 $rights = false;
 $connected = false;
 $permission = "utilisateur";
 
 if (isset($_POST["delete_id_user"])) {
-    deleteUser($_POST["delete_id_user"]);
+    if ($_POST["delete_id_user"] == $_SESSION["login"]) {
+        header("Location: admin.php");
+        exit();
+    }
+    $database->deleteUser($_POST["delete_id_user"]);
     header("Location: admin.php");
     exit();
 }
 
 if (isset($_SESSION["login"])) {
-    $permission = getPermission($_SESSION["login"])[0]["permission"];
+    $permission = $database->getPermission($_SESSION["login"]);
     if ($permission == "administrateur" || $permission == "moderateur") {
         $connected = true;
     } else {
         header("Location: index.php");
         exit();
     }
+} else {
+    header("Location: index.php");
+    exit();
 }
 
-if ($permission == "administrateur" && $connected) {
+if ($permission == "administrateur") {
     if (isset($_POST["admin_permission"]) && isset($_POST["admin_id"])) {
-        changePermission($_POST["admin_id"], $_POST["admin_permission"]);
+        $database->changePermission($_POST["admin_id"], $_POST["admin_permission"]);
         header("Location: admin.php");
         exit();
     } else if (isset($_POST["modo_permission"]) || isset($_POST["modo_id"])) {
-        changePermission($_POST["modo_id"],$_POST["modo_permission"]);
+        $database->changePermission($_POST["modo_id"],$_POST["modo_permission"]);
         header("Location: admin.php");
         exit();
     } else if (isset($_POST["conseiller_permission"]) || isset($_POST["conseiller_id"])) {
-        changePermission($_POST["conseiller_id"],$_POST["conseiller_permission"]);
+        $database->changePermission($_POST["conseiller_id"],$_POST["conseiller_permission"]);
         header("Location: admin.php");
         exit();
     } else if (isset($_POST["utilisateur_permission"]) || isset($_POST["utilisateur_id"])) {
-        changePermission($_POST["utilisateur_id"],$_POST["utilisateur_permission"]);
+        $database->changePermission($_POST["utilisateur_id"],$_POST["utilisateur_permission"]);
         header("Location: admin.php");
         exit();
     }
@@ -85,7 +92,7 @@ if ($permission == "administrateur" && $connected) {
         </div>
     </section>
     <section id="users__list">
-        <?php foreach(allUsers() as $values) { ?>
+        <?php foreach($database->allUsers() as $values) { ?>
             <div id="users__list__element">
                 <div id="users__list__element__infos">
                     <p id="users__list__element__infos__pseudo">
@@ -93,8 +100,8 @@ if ($permission == "administrateur" && $connected) {
                     </p>
                     <div id="users__list__element__infos__permission">
                         <?php
-                        echo htmlspecialchars(getPermission(getId($values["pseudo"])[0]["id"])[0]["permission"]);
-                        $userId = getId($values["pseudo"])[0]["id"];
+                        echo htmlspecialchars($database->getPermission($database->getId($values["pseudo"])));
+                        $userId = $database->getId($values["pseudo"]);
                          ?>
                     </div>
                 </div>

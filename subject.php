@@ -8,6 +8,13 @@ if (!isset($_GET["id"])) {
 }
 
 include_once "app/database.php";
+$database = new Database();
+
+if ($database->getTitle($_GET['id']) == null){
+    header("Location: index.php");
+    exit();
+}
+
 $connected = false;
 $rights = false;
 $conseiller = false;
@@ -22,35 +29,36 @@ $load = 50;
 
 if (isset($_SESSION["login"])) {
     $connected = true;
-    if (getPermission($_SESSION['login'])[0]["permission"] == "moderateur" || getPermission($_SESSION['login'])[0]["permission"] == 'administrateur') {
+    $permission = $database->getPermission($_SESSION['login']);
+    if ($permission == "moderateur" || $permission == 'administrateur') {
         $rights = true;
     }
 }
 
 if (isset($_POST["delete_id_message"])) {
     $idmsg = $_POST["delete_id_message"];
-    $idauteur = getAuteur($idmsg)[0][0];
+    $idauteur = $database->getAuteur($idmsg);
     if ( $idauteur == $_SESSION["login"] || $rights = true) {
-        deleteMessage($idmsg);
+        $database->deleteMessage($idmsg);
         header("Location: subject.php?id=" .$_GET["id"]);
         exit();
     }
 }
 
 if (isset($_POST["like_message_id"])) {
-    modifyLikes($_POST["like_message_id"], $_SESSION["login"]);
+    $database->modifyLikes($_POST["like_message_id"], $_SESSION["login"]);
     header("Location: subject.php?id=" .$_GET["id"]);
     exit();
 }
 
 if (isset($_POST["write_message"])) {
-    addMessages($_SESSION['login'], $_GET['id'], $_POST["write_message"]);
+    $database->addMessages($_SESSION['login'], $_GET['id'], $_POST["write_message"]);
     header("Location: subject.php?id=" .$_GET["id"]);
     exit();
 }
 
-$titre = htmlspecialchars(getTitle($_GET['id'])[0]["titre"]);
-$messages = getMessages($_GET['id'], $load);
+$titre = htmlspecialchars($database->getTitle($_GET['id']));
+$messages = $database->getMessages($_GET['id'], $load);
 ?>
 
 <html lang="fr">
@@ -74,7 +82,7 @@ $messages = getMessages($_GET['id'], $load);
         <?php if (isset($_SESSION['login'])) {?>
             <div id="header__user">
                 <div id="header__user__name">
-                    <?php echo htmlspecialchars(getName($_SESSION['login'])); ?>
+                    <?php echo htmlspecialchars($database->getName($_SESSION['login'])); ?>
                 </div>
                 <a href="index.php?logout=1" id="header__user__name__log_out_link">
                     <img src="img/log-out.png" alt="log out image" id="header__user__name__log_out_link__image">
@@ -105,7 +113,7 @@ $messages = getMessages($_GET['id'], $load);
             <?php if ($connected) { ?>
                 <form action="#" method="post" id="messages__list__element__like_form">
                     <p id="messages__list__element__like_form__like">
-                        <?php echo getLikes($values["id"])[0]["COUNT(*)"]; ?>
+                        <?php echo $database->getLikes($values["id"]); ?>
                     </p>
                     <input type="hidden" name="like_message_id" value="<?php echo $values['id']; ?>">
                     <input type="image" id="messages__list__element__like_form__image" src="img/like.png" alt="like">
@@ -118,7 +126,7 @@ $messages = getMessages($_GET['id'], $load);
             <?php }
             } ?>
                 <p id="messages__list__element__name">
-                    <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
+                    <?php echo htmlspecialchars($database->getName($values["idauteur"])); ?>
                 </p>
             </div>
         <?php } ?>

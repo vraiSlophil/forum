@@ -3,17 +3,18 @@
 session_start();
 
 include_once "app/database.php";
-
+$database = new Database();
 $error = false;
 $errorLen = false;
 $errorChar = false;
 
 $rights = false;
 $connected = false;
+$permission = "utilisateur";
 
 if (isset($_SESSION["login"])) {
     $connected = true;
-    $permission = getPermission($_SESSION["login"])[0]["permission"];
+    $permission = $database->getPermission($_SESSION["login"]);
     if ($permission == "administrateur" || $permission == "moderateur") {
         $rights = true;
     }
@@ -21,9 +22,9 @@ if (isset($_SESSION["login"])) {
 
 if (isset($_POST["delete_id_subject"])) {
     $idsbjct = $_POST["delete_id_subject"];
-    $idauteur = getSubjectAuteur($idsbjct)[0][0];
-    if ($idauteur == $_SESSION["login"] || ($permission == "moderateur" || $permission == "administrateur")) {
-        deleteSubject($idsbjct);
+    $idauteur = $database->getSubjectAuteur($idsbjct);
+    if ($idauteur == $_SESSION["login"] || $permission == "moderateur" || $permission == "administrateur") {
+        $database->deleteSubject($idsbjct);
         header("Location: index.php");
         exit();
     }
@@ -45,16 +46,18 @@ if (isset($_GET["logout"]) && $_GET["logout"] && $connected) {
 
 if(isset($_POST['new_subject_name']) && $connected) {
     $new_sbjct = $_POST['new_subject_name'];
-    if (strlen($new_sbjct) > 128) {
+    if (strlen($new_sbjct) > 127) {
         $error = true;
         $errorLen = true;
-    } else if (!preg_match('/[^A-Za-z0-9\p{P}\p{S}\p{L}]/', $new_sbjct)) { //inderdit certains caractères
-        $error = true;
-        $errorChar = true;
     } else {
-        $sub = createSubject($new_sbjct, $_SESSION["login"]);
+        if (preg_match('/[^A-Za-z0-9\p{P}\p{S}\p{L}]/', $new_sbjct)) { //inderdit certains caractères
+            $error = true;
+            $errorChar = true;
+        } else {
+        $sub = $database->createSubject(wordwrap($new_sbjct, 70, "\n", true), $_SESSION["login"]);
         header("Location: index.php");
         exit();
+        }
     }
 }
 
@@ -71,20 +74,20 @@ if(isset($_POST["register_pseudo"])){
             header("Location: register.php");
             exit();
         }
-        $user = createUser($_POST["register_pseudo"], $_POST["register_password"]);
+        $user = $database->createUser($_POST["register_pseudo"], $_POST["register_password"]);
         if($user != 1) {
             $_SESSION["pseudo_not_unique"] = true;
             header("Location: register.php");
             exit();
         }
-        $_SESSION["login"] = getId($_POST["register_pseudo"])[0]["id"];
+        $_SESSION["login"] = $database->getId($_POST["register_pseudo"]);
         header("Location: index.php");
         exit();
     }
 }
 
 if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
-    $lo = checkLogin($_POST["login_pseudo"], $_POST["login_password"]);
+    $lo = $database->checkLogin($_POST["login_pseudo"], $_POST["login_password"]);
     if ($lo == 0){
         $_SESSION["problem_login"] = true;
         header("Location: login.php");
@@ -117,7 +120,7 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
         <?php if ($connected) {?>
             <div id="header__user">
                 <div id="header__user__name">
-                    <?php echo htmlspecialchars(getName($_SESSION['login'])); ?>
+                    <?php echo htmlspecialchars($database->getName($_SESSION['login'])); ?>
                 </div>
                 <a href="?logout=1" id="header__user__name__log_out_link">
                     <img src="img/log-out.png" alt="log out image" id="header__user__name__log_out_link__image">
@@ -137,7 +140,7 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
     </header>
 
     <section id="subjects">
-        <?php foreach(getSubjects($load) as $values) { ?>
+        <?php foreach($database->getSubjects($load) as $values) { ?>
         <div id="subjects__list">
             <div id="subjects__list__element">
                 <a href="subject.php?id=<?php echo $values["id"]; ?>" id="subjects__list__element__link">
@@ -152,17 +155,17 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
                 <?php }
                 } ?>
                 <p id="subjects__list__element__name">
-                    par <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
+                    par <?php echo htmlspecialchars($database->getName($values["idauteur"])); ?>
                 </p>
             </div>
         </div>
         <?php }
-        if (count(getSubjects($load)) >= $load) { ?>
+        if (count($database->getSubjects($load)) >= $load) { ?>
         <form action="#" method="post" id="subjects__more_sub">
             <input type="hidden" name="load" value="<?php echo $load; ?>">
             <input type="submit" value="Voir plus">
         </form>
-        <?php } else if(count(getSubjects($load)) == 0) { ?>
+        <?php } else if(count($database->getSubjects($load)) == 0) { ?>
         <p id="messages__no_messages">
             Il n'y a pas de sujets.
         </p>
@@ -173,12 +176,12 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
         <?php if ($error) {
             if ($errorLen) { ?>
                 <p id="new_subject__error">
-                    La taille du sujet de doit pas excéder les 128 caractères
+                    La taille du sujet de doit pas excéder les 128 caractères.
                 </p>
             <?php }
             if ($errorChar) { ?>
                 <p id="new_subject__error">
-                    Impossible d'utliser l'espace ou le caractère invisible dans le nom du sujet
+                    Impossible d'utiliser certains caractères dans le nom du sujet.
                 </p>
             <?php }
         } ?>
@@ -190,7 +193,7 @@ if (isset($_POST["login_pseudo"]) && isset($_POST["login_password"])) {
             if (isset($_SESSION['login'])) {
             ?>
             <form action="#" method="post" id="new_subject__formu__form">
-                <input id="new_subject__formu__form__name" name="new_subject_name" type="textbox" placeholder="Entrez votre nouveau sujet">
+                <input id="new_subject__formu__form__name" name="new_subject_name" placeholder="Entrez votre nouveau sujet">
                 <input id="new_subject__formu__form__submit" type="submit" value="Créer">
             </form>
             <?php } else { ?>
