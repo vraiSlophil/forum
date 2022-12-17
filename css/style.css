@@ -82,6 +82,7 @@ body {
 
 #header__links > a,
 #header__user__name__log_out_link,
+#messages__list__element__like_form,
 #header__user__name__admin_link,
 #new_subject__formu__form__submit,
 #subjects__more_sub > input,
@@ -120,7 +121,8 @@ body {
     margin: unset;
 }
 
-#header__user__name__log_out_link {
+#header__user__name__log_out_link,
+#messages__list__element__like_form {
     padding: 0.7em;
 }
 
@@ -129,7 +131,8 @@ body {
     margin-left: unset;
 }
 
-#header__user__name__log_out_link__image {
+#header__user__name__log_out_link__image,
+#messages__list__element__like_form__image {
     height: 1.2em;
     filter: invert(1);
 }
@@ -142,7 +145,8 @@ body {
 #messages,
 #new_subject {
     padding: 2em 0;
-    width: 50%;
+    min-width: 50%;
+    width: max-content;
     margin: 2em auto 0 auto;
     background-color: #252525;
     display: flex;
@@ -167,7 +171,7 @@ body {
 }
 
 #messages__subject_title {
-    padding-bottom: 1em;
+    padding: 0 1em 1em 1em;
     border-bottom: 0.15em solid #303030;
     width: 100%;
     text-align: center;
@@ -175,7 +179,8 @@ body {
 
 #messages__list__element,
 #subjects__list__element,
-#users__list__element {
+#users__list__element,
+#users__head {
     width: 80%;
     display: flex;
     align-items: center;
@@ -184,6 +189,39 @@ body {
     background-color: #303030;
     margin: 0.5em 0;
     border-radius: 0.3em;
+}
+
+#users__head {
+    margin: 1em auto;
+    flex-direction: column;
+}
+
+#users__head__home,
+#users__head__content {
+    width: 100%;
+}
+
+#users__head__home {
+    padding: 1em 0 0 1em;
+}
+
+#users__head__content,
+#users__head__content__infos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+#users__head__content {
+    padding: 1em;
+}
+
+#users__head__content__infos {
+    padding: 0 1em 0 0;
+    width: 42%;
+    border-right: 0.15em solid #252525;
+    height: calc(3em*0.9);
 }
 
 #messages__list__element__delete,
@@ -396,4 +434,16 @@ body {
 #users__list__element__infos__permission {
     cursor: unset;
     background-color: goldenrod;
+}
+
+#messages__list__element__like_form,
+#messages__list__element__like_form__like {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#messages__list__element__like_form__like {
+    height: 100%;
+    margin-right: 0.8em;
 }

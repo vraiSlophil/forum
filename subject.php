@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
 session_start();
 
 if (!isset($_GET["id"])) {
@@ -24,7 +22,7 @@ $load = 50;
 
 if (isset($_SESSION["login"])) {
     $connected = true;
-    if (getPermission($_SESSION['login'])[0] == "moderateur" || getPermission($_SESSION['login'])[0] == 'administrateur') {
+    if (getPermission($_SESSION['login'])[0]["permission"] == "moderateur" || getPermission($_SESSION['login'])[0]["permission"] == 'administrateur') {
         $rights = true;
     }
 }
@@ -50,7 +48,6 @@ if (isset($_POST["write_message"])) {
     header("Location: subject.php?id=" .$_GET["id"]);
     exit();
 }
-
 
 $titre = htmlspecialchars(getTitle($_GET['id'])[0]["titre"]);
 $messages = getMessages($_GET['id'], $load);
@@ -99,30 +96,30 @@ $messages = getMessages($_GET['id'], $load);
         <h1 id="messages__subject_title">
             <?php echo $titre; ?>
         </h1>
-        <?php foreach($messages as $values){ ?>
         <div id="messages__list">
+        <?php foreach($messages as $values){ ?>
             <div id="messages__list__element">
                 <p id="messages__list__element__message">
                     <?php echo htmlspecialchars($values["contenu"]); ?>
                 </p>
-            <?php if ($connected) {
-                if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
-                <form action="#" method="post" id="messages__list__element__delete">
-                    <input type="hidden" name="delete_id_message" value="<?php echo $values["id"]; ?>">
-                    <input type="image" id="messages__list__element__delete__image" src="img/delete.png" alt="delete">
-                </form>
-                <?php }
-            } ?>
-                <p id="messages__list__element__name">
-                    <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
-                </p>
+            <?php if ($connected) { ?>
                 <form action="#" method="post" id="messages__list__element__like_form">
                     <p id="messages__list__element__like_form__like">
                         <?php echo getLikes($values["id"])[0]["COUNT(*)"]; ?>
                     </p>
                     <input type="hidden" name="like_message_id" value="<?php echo $values['id']; ?>">
-                    <input type="image" id="messages__list__element__like_form__image" src="img/like.png">
+                    <input type="image" id="messages__list__element__like_form__image" src="img/like.png" alt="like">
                 </form>
+                <?php if($_SESSION['login'] == $values["idauteur"] || $rights) { ?>
+                <form action="#" method="post" id="messages__list__element__delete">
+                    <input type="hidden" name="delete_id_message" value="<?php echo $values["id"]; ?>">
+                    <input type="image" id="messages__list__element__delete__image" src="img/delete.png" alt="delete">
+                </form>
+            <?php }
+            } ?>
+                <p id="messages__list__element__name">
+                    <?php echo htmlspecialchars(getName($values["idauteur"])); ?>
+                </p>
             </div>
         <?php } ?>
         </div>
@@ -145,21 +142,5 @@ $messages = getMessages($_GET['id'], $load);
         </div>
         <?php } ?>
     </section>
-<!--<script>-->
-<!--    function dsl(idmsg) {-->
-<!--        let element = document.getElementById("messages__list__element__like");-->
-<!--        let likes = element.innerHTML;-->
-<!--        if (isNaN(parseInt(likes))) {-->
-<!--            return;-->
-<!--        }-->
-<!--        console.log("clique like4");-->
-<!--        fetch('script.php', {-->
-<!--            method: 'POST',-->
-<!--            body: `id_message=${idmsg}`-->
-<!--        });-->
-<!--        element.innerHTML = "" + (parseInt(likes) + 1);-->
-<!---->
-<!--    }-->
-<!--</script>-->
 </body>
 </html>

@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<?php 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+<?php
 session_start();
 
 include_once "app/database.php";
@@ -65,10 +63,27 @@ if ($permission == "administrateur" && $connected) {
                 <p id="header__head__title__sub_title">Forum de conseil en séduction</p>
             </div>
         </div>
-        <a href="index.php" id="register_form__home">
+    </header>
+    <section id="users__head">
+        <a href="index.php" id="users__head__home">
             Retour à l'accueil
         </a>
-    </header>
+        <div id="users__head__content">
+            <div id="users__head__content__infos">
+                <p id="users__head__content__infos__pseudo">
+                    Pseudo de l'utilisateur
+                </p>
+                <p id="users__head__content__infos__permission">
+                    Permission de l'utilisateur
+                </p>
+            </div>
+            <div id="users__head__content__actions">
+                <p id="users__head__actions__content__permission">
+                    Changer ses permissions
+                </p>
+            </div>
+        </div>
+    </section>
     <section id="users__list">
         <?php foreach(allUsers() as $values) { ?>
             <div id="users__list__element">

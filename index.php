@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
 session_start();
 
 include_once "app/database.php";
@@ -24,7 +22,7 @@ if (isset($_SESSION["login"])) {
 if (isset($_POST["delete_id_subject"])) {
     $idsbjct = $_POST["delete_id_subject"];
     $idauteur = getSubjectAuteur($idsbjct)[0][0];
-    if ($idauteur == $_SESSION["login"] || $rights) {
+    if ($idauteur == $_SESSION["login"] || ($permission == "moderateur" || $permission == "administrateur")) {
         deleteSubject($idsbjct);
         header("Location: index.php");
         exit();
