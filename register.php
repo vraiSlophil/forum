@@ -27,7 +27,7 @@ session_start();
             <p id="error_connect__message">
             <?php 
             echo "Votre mot de passe n'est pas le même dans les deux champs.";
-            unset($_SESSION["problem_login"]);
+            unset($_SESSION["problem_password"]);
             ?>
             </p>
         </div>
@@ -38,7 +38,7 @@ session_start();
             <p id="error_connect__message">
             <?php 
             echo "Votre pseudo est trop long";
-            unset ($_SESSION["pseudo_too_long"]);
+            unset($_SESSION["pseudo_too_long"]);
             ?>
             </p>
         </div>
@@ -50,7 +50,7 @@ session_start();
             <p id="error_connect__message">
             <?php 
             echo "Ce pseudo est déjà présent dans notre base de données, veuillez en choisir un autre.";
-            unset ($_SESSION["pseudo_not_unique"]);
+            unset($_SESSION["pseudo_not_unique"]);
             ?>
             </p>
         </div>

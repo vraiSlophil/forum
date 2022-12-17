@@ -50,7 +50,7 @@ if(isset($_POST['new_subject_name']) && $connected) {
         $error = true;
         $errorLen = true;
     } else {
-        if (preg_match('/[^A-Za-z0-9\p{P}\p{S}\p{L}]/', $new_sbjct)) { //inderdit certains caractères
+        if (!preg_match('/[^A-Za-z0-9\p{P}\p{S}\p{L}]/', $new_sbjct)) { //inderdit certains caractères
             $error = true;
             $errorChar = true;
         } else {
